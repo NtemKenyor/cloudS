@@ -5,7 +5,8 @@ const { serialize } = require("borsh");
 const programId = new PublicKey("HFnssVc9XfdaHe4pdTNG8DH69V6zrKviSFWjf4FWTifp");
 
 // Connect to a local validator or devnet
-const connection = new Connection('http://127.0.0.1:8899', 'confirmed');
+// const connection = new Connection('http://127.0.0.1:8899', 'confirmed');
+const connection = new Connection("https://rpc.devnet.soo.network/rpc", "confirmed");
 
 // Define the PostMetadata structure
 class PostMetadata {

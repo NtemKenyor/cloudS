@@ -201,12 +201,17 @@
     </div>
 
     <script>
+        
         // Check if solanaWeb3 is defined
         if (typeof solanaWeb3 === 'undefined') {
             console.log("solanaWeb3 is not defined. Make sure the Solana Web3 library is loaded.");
         }
     
         let keypair;
+        // Connect to the Solana devnet
+        // const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
+        const connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
+        // const connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
     
         // Create a new wallet and save private key in localStorage
         // async function createWallet() {
@@ -228,9 +233,12 @@
                 keypair = solanaWeb3.Keypair.fromSecretKey(Uint8Array.from(JSON.parse(privateKey)));
                 displayWalletInfo();
             } else {
-                alert('No wallet found. Please create a new wallet.');
+                if (confirm('No wallet found. Would you like to go to the homepage to create a new wallet?')) {
+                    window.location.href = 'index.html'; // Redirects to the homepage
+                }
             }
         }
+
     
         // Download private key as a JSON file
         function downloadPrivateKey() {
@@ -258,13 +266,7 @@
             reader.readAsText(file);
         }
     
-        // Connect to the Solana devnet
-        // const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-    
-        // const connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
-    
-        const connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
-    
+        
         // Fetch wallet balance
         async function getBalance() {
             if (!keypair) {

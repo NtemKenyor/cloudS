@@ -201,6 +201,10 @@
                         ? `${post.author.slice(0, 12)}...`
                         : post.author;
 
+                    // const trimmedPubkey = entry.pubkey.length > 15
+                    //     ? `${entry.pubkey.slice(0, 12)}...`
+                    //     : entry.pubkey;
+
                     const imageTag = post.image_url ? `<img src="${post.image_url}" alt="Post Image">` : "";
                     const titleDiv = post.title ? `<div class="title">${post.title}</div>` : "";
 
@@ -216,8 +220,8 @@
                         ${titleDiv}
                         <div class="content">${convertMarkdownToHtml(post.content)}</div>
                         <div class="date">${formatDate(post.date)}</div>
-                        <div class="author">Posted by: ${post.author}</div>
-
+                        <div class="author" title="${post.author}>Posted by: ${trimmedAuthor}</div>
+                        <br/>
                         
                         <div class="post-actions">
                             <button class="like-button">
@@ -407,10 +411,8 @@
 
         // Connect to the Solana devnet
         // const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-
-        // const connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
-
-        const connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
+        const connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
+        // const connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
 
         // Fetch wallet balance
         async function getBalance() {

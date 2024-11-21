@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Social Media Chat</title>
+    <script src="https://unpkg.com/@solana/web3.js@^1.32.0/lib/index.iife.min.js"></script> <!-- Solana SDK -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* General Reset */
@@ -516,15 +517,50 @@
 
 
 const baseUrl = 'http://localhost/cloudS/interact/server/app.php'; // Replace this with your server URL
-let publicKey = getPublicKeyFromCookies(); // Fetch global public key from cookies
+
+if (typeof solanaWeb3 === 'undefined') {
+    console.log("solanaWeb3 is not defined. Make sure the Solana Web3 library is loaded.");
+}
+
+let keypair;
+
+// Create a new wallet and save private key in localStorage
+// async function createWallet() {
+//     keypair = solanaWeb3.Keypair.generate();
+//     localStorage.setItem('solana_private_key', JSON.stringify(Array.from(keypair.secretKey)));
+//     displayWalletInfo();
+// }
+
+// Display public key and balance
+function displayWalletInfo() {
+    document.getElementById('publicKey').textContent = keypair.publicKey.toBase58();
+    getBalance();
+}
+
+// Retrieve private key from localStorage
+function loadStoredWallet() {
+    const privateKey = localStorage.getItem('solana_private_key');
+    if (privateKey) {
+        keypair = solanaWeb3.Keypair.fromSecretKey(Uint8Array.from(JSON.parse(privateKey)));
+        // displayWalletInfo();
+    } else {
+        if (confirm('No wallet found. Would you like to go to the homepage to create a new wallet?')) {
+            window.location.href = 'index.html'; // Redirects to the homepage
+        }
+    }
+}
+
+let publicKey;
+
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
+    loadStoredWallet();
+    publicKey = keypair.publicKey.toBase58(); // Fetch global public key from cookies
+    console.log("The Public Key: ". publicKey);
+    
     if (!publicKey) {
-        if (confirm('No public key found. Would you like to create an account?')) {
-            createAccount();
-        }
-        return;
+        console.log("could not get user Public Key")
     }
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -533,11 +569,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (receiverKey) {
         setActiveChat(receiverKey);
     } else {
-        alert('Please select a receiver to start chatting.');
+        console.log('Please select a receiver to start chatting.');
     }
 
     fetchConversations();
     document.getElementById('send-button').addEventListener('click', sendMessage);
+
 });
 
 // Fetch public key from cookies
@@ -547,13 +584,13 @@ function getPublicKeyFromCookies() {
 }
 
 // Set or create public key
-async function createAccount() {
-    // Simulate account creation
-    publicKey = 'new-generated-public-key'; // Replace with actual public key generation logic
-    document.cookie = `publicKey=${publicKey}; path=/;`;
-    alert('Account created successfully!');
-    location.reload(); // Reload to initialize the app with the new public key
-}
+// async function createAccount() {
+//     // Simulate account creation
+//     publicKey = 'new-generated-public-key'; // Replace with actual public key generation logic
+//     document.cookie = `publicKey=${publicKey}; path=/;`;
+//     alert('Account created successfully!');
+//     location.reload(); // Reload to initialize the app with the new public key
+// }
 
 // Fetch conversations
 async function fetchConversations() {
@@ -606,11 +643,19 @@ async function fetchMessages(user) {
 
 // Send a message
 async function sendMessage() {
-    const receiver = document.getElementById('active-chat-user').textContent;
-    if (!receiver) {
-        alert('Please select a receiver to send a message.');
+    const urlParams = new URLSearchParams(window.location.search);
+    const receiverKey = urlParams.get('receiver_publickey');
+
+    if (!receiverKey) {
+        alert('Please select a receiver to start chatting.');
         return;
     }
+
+    const receiver = document.getElementById('active-chat-user').textContent;
+    // if (!receiver) {
+    //     alert('Please select a receiver to send a message.');
+    //     return;
+    // }
 
     const message = document.getElementById('message-input').value;
     const media = document.getElementById('media-input').files[0];
@@ -632,6 +677,7 @@ async function sendMessage() {
         const result = await response.json();
         console.log(result);
         fetchMessages(receiver);
+        document.getElementById('message-input').value = "";
     } catch (error) {
         console.error('Error sending message:', error);
     }

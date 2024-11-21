@@ -39,7 +39,7 @@ function getDbConnection() {
     // $port = $_ENV['DB_PORT'];
 
 
-    $conn = mysqli_connect('localhost', 'nkenyor', 'SomeRandom&&123rOYNEK', 'cloudS');
+    $conn = mysqli_connect('localhost', 'nkenyor', 'K', 'cloudS');
     // $conn = mysqli_connect(''.$host, ''.$user, ''.$password, ''.$dbname);
     // $conn = mysqli_connect($host, $user, $password, $dbname, intval(80) );
     // echo "still test";
@@ -56,7 +56,9 @@ function getDbConnection() {
 }
 
 
-getDbConnection();
+
+
+// getDbConnection();
 
 // echo gethostbyname('localhost');
 // $connection = mysqli_connect('localhost', 'nkenyor', 'SomeRandom&&123rOYNEK', 'cloudS');

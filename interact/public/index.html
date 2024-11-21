@@ -11,10 +11,10 @@
     <script src="js/forge.min.js" defer></script>
     <!-- <script src="js/marked.min.js" defer></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-    <script src="js/general.js?id=748498365" defer></script>
+    <script src="js/general.js?id=9484589" defer></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script> -->
 
-    <link rel="stylesheet" href="styles/general.css?id=68738273829">
+    <link rel="stylesheet" href="styles/general.css?id=7485738">
 <style>
     /* Basic Reset */
 /* body, html {
@@ -688,7 +688,7 @@ function setupEmailChange() {
     const newEmail = emailDisplayer.value;
     if (newEmail) {
         writeCookie('email', newEmail);
-        alert('Email updated and saved to cookies!');
+        alert('Email updated and saved successfully!');
     } else {
         alert('Email cannot be empty!');
     }
@@ -1011,6 +1011,8 @@ document.getElementById('postForm').addEventListener('submit', async (event) => 
         await make_some_post();
     } finally {
         hideSpinner(submitButton, originalText); // Hide spinner after completion
+        document.getElementById('postPopup').style.display = 'none'; // to hide the post Pop-up
+        window.location.reload();
     }
 });
 
@@ -1028,7 +1030,7 @@ async function d_post_sharer(entry){
         others: JSON.stringify({
             nft: "false",
             nude: "false",
-            encryption: "AES256", // encryption: "AES256",
+            encryption: "", // encryption: "AES256",
             share: "true",
             category: "entertainment", // "technology",
             hash: "abc123hash",

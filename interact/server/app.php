@@ -466,7 +466,7 @@ function fetchMessages($pubkey, $r_pubkey, $category = null) {
         $presetConversations = [
             [
                 "chart_id" => null,
-                "sender_pubkey" => "system",
+                "sender_pubkey" => "AI",
                 "receiver_pubkey" => $pubkey,
                 "message" => "Use our AI Friend",
                 "timestamp" => date('Y-m-d H:i:s'),
@@ -474,11 +474,11 @@ function fetchMessages($pubkey, $r_pubkey, $category = null) {
             ],
             [
                 "chart_id" => null,
-                "sender_pubkey" => "system-iamge",
+                "sender_pubkey" => "AI-Image-creator",
                 "receiver_pubkey" => $pubkey,
                 "message" => "You can now create images from prompts",
                 "timestamp" => date('Y-m-d H:i:s'),
-                "other_pubkey" => "AI image creator"
+                "other_pubkey" => "AI-Image-creator"
             ]
         ];
 
