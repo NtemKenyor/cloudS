@@ -634,6 +634,7 @@
         document.getElementById('transfer')?.addEventListener('click', () => userRedirect("send.html"));
         document.getElementById('home')?.addEventListener('click', () => userRedirect("index.html"));
         document.getElementById('message_item')?.addEventListener('click', () => userRedirect("messenger.html"));
+        document.getElementById('games')?.addEventListener('click', () => userRedirect("games.html"));
 
 
         // const profileElement = document.getElementById('profile');

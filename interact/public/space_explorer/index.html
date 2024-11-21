@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Adventure Game</title>
+    <link rel="icon" href="../logo.png" type="image/jpeg">
+    
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000; /* Set a solid black background for the stars to be visible */
+        }
+
+        /* Starry background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1; /* Behind all other elements */
+        }
+
+    
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 1.5s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 20%, 80%, 100% { opacity: 0; }
+            10%, 30%, 50%, 70% { opacity: 1; }
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            background: rgba(0, 0, 0, 0.8); /* Dark background for the canvas */
+        }
+
+        #scoreDisplay, #timerDisplay {
+            color: white;
+            text-align: center;
+            font-size: 24px;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        #walletButtons {
+            display: none;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        #walletButtons button {
+            margin: 0 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: rgba(0, 150, 136, 0.8); /* Teal background */
+            border: none;
+            border-radius: 5px;
+            color: white;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        #walletButtons button:hover {
+            background-color: rgba(0, 150, 136, 1); /* Brighter teal on hover */
+        }
+
+        #walletButtons button:active {
+            background-color: rgba(0, 120, 104, 1); /* Darker teal when active */
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div id="scoreDisplay">Score: 0</div>
+    <div id="timerDisplay">Time: 30</div>
+    <canvas id="gameCanvas" width="400" height="600"></canvas>
+    <div id="walletButtons">
+        <button onclick="connectSolflare()">Connect Solflare</button>
+        <button onclick="connectPhantom()">Connect Phantom</button>
+    </div>
+    
+    <!-- Audio elements -->
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="music.mp3" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
+    <audio id="startSound" autoplay>
+        <source src="effects.wav" type="audio/mpeg">
+        Your browser does not support the audio tag.
+    </audio>
+
+    <script src="script_slient.js?id=5464634" defer></script>
+    <script src="script.js?id=3874748"></script>
+
+    <script>
+        // Create stars in the background
+        const starField = document.querySelector('.stars');
+        const numberOfStars = 100; // You can change the number of stars
+
+        for (let i = 0; i < numberOfStars; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 3 + 1; // Star size between 1 and 4 pixels
+            const posX = Math.random() * window.innerWidth; // Random x position
+            const posY = Math.random() * window.innerHeight; // Random y position
+            const animationDuration = Math.random() * 2 + 1; // Random twinkle duration between 1 and 3 seconds
+
+            // Set star properties
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${posX}px`;
+            star.style.top = `${posY}px`;
+            star.style.animationDuration = `${animationDuration}s`;
+            star.style.animationDelay = `${Math.random() * 2}s`; // Random delay for twinkle effect
+
+            starField.appendChild(star);
+        }
+
+        // Function to start background music and sound effects
+        function startGame() {
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const startSound = document.getElementById('startSound');
+
+            // Play the sound effect
+            startSound.play();
+
+            // Start background music
+            backgroundMusic.play();
+        }
+
+        // Call startGame when the game starts
+        // Replace this with your actual game start logic
+        window.onload = startGame;
+    </script>
+</body>
+</html>

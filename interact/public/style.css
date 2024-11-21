@@ -1,0 +1,140 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Full-Screen Background */
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    background-color: #0a0a0a;
+}
+
+/* Background Animations */
+.background {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.stars, .stars2, .stars3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('stars.png') repeat top center;
+    z-index: -1;
+    animation: animateStars 50s linear infinite;
+}
+
+.stars2 {
+    background: url('stars2.png') repeat top center;
+    animation: animateStars2 100s linear infinite;
+}
+
+.stars3 {
+    background: url('stars3.png') repeat top center;
+    animation: animateStars3 150s linear infinite;
+}
+
+@keyframes animateStars {
+    from {transform: translateY(0);}
+    to {transform: translateY(-1000px);}
+}
+
+@keyframes animateStars2 {
+    from {transform: translateY(0);}
+    to {transform: translateY(-2000px);}
+}
+
+@keyframes animateStars3 {
+    from {transform: translateY(0);}
+    to {transform: translateY(-3000px);}
+}
+
+/* SOON Universe Logo */
+.logo img {
+    width: 250px;
+    animation: fadeInLogo 2s ease-in-out;
+}
+
+@keyframes fadeInLogo {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+/* Centered Container */
+.container {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+}
+
+/* Games List Section */
+.games-list {
+    margin-top: 30px;
+}
+
+.title {
+    font-size: 3rem;
+    color: #00aaff;
+    animation: fadeInText 2s ease-in-out;
+}
+
+@keyframes fadeInText {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+/* Individual Game Items */
+.game-item {
+    margin: 20px 0;
+    animation: slideIn 1s ease-out;
+}
+
+@keyframes slideIn {
+    from {transform: translateX(-100vw);}
+    to {transform: translateX(0);}
+}
+
+.game-title {
+    font-size: 2rem;
+    color: #ff9900;
+}
+
+.game-description {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* Play Button */
+.play-button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #ff5050;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.play-button:hover {
+    background-color: #ff3333;
+}
+
+/* Animations */
+.play-button:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+}
