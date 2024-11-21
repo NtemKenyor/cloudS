@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Chat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #ff4d4d, #4dafff);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            overflow: auto;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1200px;
+            height: 80%;
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: auto;
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 100%;
+            max-width: 300px;
+            background-color: #1b1f38;
+            color: white;
+            padding: 20px;
+            flex-shrink: 0;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: slideIn 0.5s ease;
+        }
+
+        .conversation {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            background-color: #34495e;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        .conversation:hover {
+            background-color: #4dafff;
+            transform: scale(1.05);
+        }
+
+        /* Chat Area Styling */
+        .chat-area {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #f7f9fc;
+            height: 100%;
+        }
+
+        .chat-area h2 {
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #ff4d4d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .back-button {
+            background: #ff4d4d;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #ff3333;
+        }
+
+        .messages-display {
+            flex-grow: 1;  /* Allow it to grow */
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            height: calc(100% - 100px);  /* Adjust height based on other elements */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            word-wrap: break-word;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .message.sender {
+            background-color: #ffcccc;
+            align-self: flex-start;
+        }
+
+        .message.receiver {
+            background-color: #cce6ff;
+            align-self: flex-end;
+        }
+
+        .message img, .message video {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .message-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        textarea {
+            flex-grow: 1;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            resize: none;
+            font-size: 16px;
+            outline: none;
+            transition: box-shadow 0.2s;
+        }
+
+        textarea:focus {
+            box-shadow: 0 0 5px #4dafff;
+        }
+
+        .upload-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .upload-button svg {
+            width: 30px;
+            height: 30px;
+            fill: #4dafff;
+            transition: transform 0.2s ease;
+        }
+
+        .upload-button:hover svg {
+            transform: scale(1.2);
+        }
+
+        button {
+            background-color: #ff4d4d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #ff3333;
+            transform: scale(1.05);
+        }
+
+        .the_option_chain{
+            display: flex;
+            justify-content: center;
+        }
+
+        .the_option_chain select {
+            padding: 9px;
+            max-width: 80%;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .menu-bar {
+            display: none;
+
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .sidebar {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 300px;
+                z-index: 1000;
+            }
+
+            .menu-bar {
+                display: block;
+                background-color: #1b1f38;
+                color: white;
+                padding: 10px 20px;
+                font-size: 18px;
+                cursor: pointer;
+            }
+
+            .menu-bar:hover {
+                background-color: #34495e;
+            }
+
+            .chat-area {
+                padding: 10px;
+            }
+
+            .message-input {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .message-input button {
+                width: 100%;
+            }
+
+            textarea {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+
+            .chat-area h2 {
+                font-size: 18px;
+            }
+
+            .message {
+                font-size: 14px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="menu-bar" id="d_menu_bar" onclick="toggleSidebar()">☰ Menu</div>
+        <div class="sidebar" id="d_sidebar">
+            <h2>Conversations</h2>
+            <div id="conversations-list">
+                <!-- Conversations will be dynamically inserted here -->
+            </div>
+        </div>
+
+        <div class="chat-area">
+            <h2>
+                Chat with <span id="active-chat-user">Select a user</span>
+                <a href="index.html" class="back-button">Back</a>
+            </h2>
+            <div class="the_option_chain">
+                <hr/>
+                <select class="the_selector_">
+                    <option>Offchain</option>
+                    <!-- <option>Onchain</option> -->
+                    <option disabled style="color: gray;">Onchain - Coming Soon</option>
+                </select>
+            </div>
+            <div id="messages-display" class="messages-display">
+                <!-- Messages will be dynamically inserted here -->
+            </div>
+            <div class="message-input">
+                <textarea id="message-input" placeholder="Type a message..."></textarea>
+                <label class="upload-button">
+                    <input type="file" id="media-input" style="display: none;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 0a12 12 0 100 24A12 12 0 0012 0zm6.93 7.64l-8.16 8.16L5.24 10.3 3.79 11.74l5.34 5.34 9.6-9.6-1.8-1.8z"/>
+                    </svg>
+                </label>
+                <!-- <button type="file" class="upload-button" id="media-input">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path d="M12 0a12 12 0 100 24A12 12 0 0012 0zm6.93 7.64l-8.16 8.16L5.24 10.3 3.79 11.74l5.34 5.34 9.6-9.6-1.8-1.8z"/>
+                    </svg>
+                </button> -->
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.style.display = sidebar.style.display === 'block' ? 'none' : 'block';
+        }
+
+        
+
+
+        // Example data for conversations
+        const conversations = [
+            { id: 1, name: "Alice" },
+            { id: 2, name: "Bob" },
+            { id: 3, name: "Charlie" }
+        ];
+
+        // Function to render the list of conversations
+        function renderConversations() {
+            const conversationsList = document.getElementById("conversations-list");
+            conversations.forEach(conv => {
+                const conversationDiv = document.createElement("div");
+                conversationDiv.classList.add("conversation");
+                conversationDiv.textContent = conv.name;
+                conversationDiv.addEventListener("click", () => loadChat(conv.id, conv.name));
+                conversationsList.appendChild(conversationDiv);
+            });
+        }
+
+        // Load chat for the selected conversation
+        function loadChat(id, name) {
+            document.getElementById("active-chat-user").textContent = name;
+            document.getElementById("messages-display").innerHTML = '';  // Clear previous messages
+
+            // Add some example messages
+            const messages = [
+                { sender: "Alice", message: "Hi there!" },
+                { sender: "You", message: "Hello!" },
+            ];
+
+            messages.forEach(msg => {
+                const messageDiv = document.createElement("div");
+                messageDiv.classList.add("message");
+                messageDiv.classList.add(msg.sender === "You" ? "sender" : "receiver");
+                messageDiv.textContent = msg.message;
+                document.getElementById("messages-display").appendChild(messageDiv);
+            });
+        }
+
+        // Send a new message
+        // document.getElementById("send-button").addEventListener("click", () => {
+        //     const messageInput = document.getElementById("message-input");
+        //     if (messageInput.value.trim() !== '') {
+        //         const messageDiv = document.createElement("div");
+        //         messageDiv.classList.add("message", "sender");
+        //         messageDiv.textContent = messageInput.value.trim();
+        //         document.getElementById("messages-display").appendChild(messageDiv);
+        //         messageInput.value = '';  // Clear the input
+        //     }
+        // });
+
+        // Initial render of conversations
+        // renderConversations();
+
+
+        const sidebar = document.getElementById("d_sidebar");
+        const menuBar = document.getElementById("d_menu_bar");
+
+        // Function to toggle sidebar visibility
+        // menuBar.addEventListener("click", () => {
+        //     sidebar.style.display = sidebar.style.display === "block" ? "none" : "block";
+        // });
+
+        // Function to close sidebar if clicking outside
+        // document.addEventListener("click", (event) => {
+        //     if (!sidebar.contains(event.target) && !menuBar.contains(event.target)) {
+        //         sidebar.style.display = "none"; // Close the sidebar
+        //     }
+        // });
+    </script>
+
+
+<!-- <script>
+    const baseUrl = 'http://localhost/cloudS/interact/server/app.php'; // Replace this with your server URL
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchConversations();
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+    });
+
+    // Fetch conversations
+    async function fetchConversations() {
+        const pubkey = 'user-public-key'; // Replace with the actual public key
+        try {
+            const response = await fetch(`${baseUrl}?conversations=true&pubkey=${pubkey}`);
+            const conversations = await response.json();
+            const conversationList = document.getElementById('conversations-list');
+            conversationList.innerHTML = '';
+            
+            conversations.forEach(convo => {
+                const convoItem = document.createElement('div');
+                convoItem.classList.add('conversation');
+                convoItem.textContent = convo.other_pubkey;
+                convoItem.addEventListener('click', () => setActiveChat(convo.other_pubkey));
+                conversationList.appendChild(convoItem);
+            });
+        } catch (error) {
+            console.error('Error fetching conversations:', error);
+        }
+    }
+
+    // Set active chat user
+    async function setActiveChat(user) {
+        document.getElementById('active-chat-user').textContent = user;
+        await fetchMessages(user);
+    }
+
+    // Fetch messages for the active chat
+    async function fetchMessages(user) {
+        const pubkey = 'user-public-key'; // Replace with the actual public key
+        const category = 'chat'; // Can be dynamic based on categories
+        try {
+            const response = await fetch(`${baseUrl}?pubkey=${pubkey}&category=${category}&r_pubkey=${user}`);
+            const messages = await response.json();
+            const messagesDisplay = document.getElementById('messages-display');
+            messagesDisplay.innerHTML = '';
+
+            messages.forEach(msg => {
+                const messageDiv = document.createElement("div");
+                messageDiv.classList.add("message");
+                messageDiv.classList.add(msg.sender === "You" ? "sender" : "receiver");
+                messageDiv.textContent = msg.message;
+                document.getElementById("messages-display").appendChild(messageDiv);
+            });
+            
+        } catch (error) {
+            console.error('Error fetching messages:', error);
+        }
+    }
+
+    // Send a message
+    async function sendMessage() {
+        const pubkey = 'user-public-key'; // Replace with the actual public key
+        const receiver = document.getElementById('active-chat-user').textContent;
+        const message = document.getElementById('message-input').value;
+        const media = document.getElementById('media-input').files[0];
+
+        const formData = new FormData();
+        formData.append('send_message', true);
+        formData.append('sender_pubkey', pubkey);
+        formData.append('receiver_pubkey', receiver);
+        formData.append('message', message);
+        if (media) {
+            formData.append('media', media);
+        }
+
+        try {
+            const response = await fetch(baseUrl, {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            console.log(result);
+            fetchMessages(receiver);
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    }
+</script> -->
+
+<script>
+
+
+const baseUrl = 'http://localhost/cloudS/interact/server/app.php'; // Replace this with your server URL
+let publicKey = getPublicKeyFromCookies(); // Fetch global public key from cookies
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+    if (!publicKey) {
+        if (confirm('No public key found. Would you like to create an account?')) {
+            createAccount();
+        }
+        return;
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const receiverKey = urlParams.get('receiver_publickey');
+
+    if (receiverKey) {
+        setActiveChat(receiverKey);
+    } else {
+        alert('Please select a receiver to start chatting.');
+    }
+
+    fetchConversations();
+    document.getElementById('send-button').addEventListener('click', sendMessage);
+});
+
+// Fetch public key from cookies
+function getPublicKeyFromCookies() {
+    const match = document.cookie.match(/(?:^|;\s*)publicKey=([^;]+)/);
+    return match ? match[1] : null;
+}
+
+// Set or create public key
+async function createAccount() {
+    // Simulate account creation
+    publicKey = 'new-generated-public-key'; // Replace with actual public key generation logic
+    document.cookie = `publicKey=${publicKey}; path=/;`;
+    alert('Account created successfully!');
+    location.reload(); // Reload to initialize the app with the new public key
+}
+
+// Fetch conversations
+async function fetchConversations() {
+    try {
+        const response = await fetch(`${baseUrl}?conversations=true&pubkey=${publicKey}`);
+        const conversations = await response.json();
+        const conversationList = document.getElementById('conversations-list');
+        conversationList.innerHTML = '';
+
+        conversations.forEach(convo => {
+            const convoItem = document.createElement('div');
+            convoItem.classList.add('conversation');
+            convoItem.textContent = convo.other_pubkey;
+            convoItem.addEventListener('click', () => setActiveChat(convo.other_pubkey));
+            conversationList.appendChild(convoItem);
+        });
+    } catch (error) {
+        console.error('Error fetching conversations:', error);
+    }
+}
+
+// Set active chat user and update URL
+async function setActiveChat(user) {
+    document.getElementById('active-chat-user').textContent = user;
+    const url = new URL(window.location);
+    url.searchParams.set('receiver_publickey', user);
+    history.replaceState(null, '', url); // Update URL without reloading
+    await fetchMessages(user);
+}
+
+// Fetch messages for the active chat
+async function fetchMessages(user) {
+    try {
+        const response = await fetch(`${baseUrl}?pubkey=${publicKey}&category=chat&r_pubkey=${user}`);
+        const messages = await response.json();
+        const messagesDisplay = document.getElementById('messages-display');
+        messagesDisplay.innerHTML = '';
+
+        messages.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(msg.sender === "You" ? "sender" : "receiver");
+            messageDiv.textContent = msg.message;
+            messagesDisplay.appendChild(messageDiv);
+        });
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+    }
+}
+
+// Send a message
+async function sendMessage() {
+    const receiver = document.getElementById('active-chat-user').textContent;
+    if (!receiver) {
+        alert('Please select a receiver to send a message.');
+        return;
+    }
+
+    const message = document.getElementById('message-input').value;
+    const media = document.getElementById('media-input').files[0];
+
+    const formData = new FormData();
+    formData.append('send_message', true);
+    formData.append('sender_pubkey', publicKey);
+    formData.append('receiver_pubkey', receiver);
+    formData.append('message', message);
+    if (media) {
+        formData.append('media', media);
+    }
+
+    try {
+        const response = await fetch(baseUrl, {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+        console.log(result);
+        fetchMessages(receiver);
+    } catch (error) {
+        console.error('Error sending message:', error);
+    }
+}
+
+</script>
+
+</body>
+</html>

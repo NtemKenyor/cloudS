@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solana Posts</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .post { border: 1px solid #ddd; padding: 15px; margin-bottom: 20px; }
+        .post img { max-width: 100%; height: auto; }
+        .post h2 { font-size: 1.5em; }
+        .post .author, .post .date { font-size: 0.9em; color: #555; }
+        .post .content { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Solana Posts</h1>
+    <div id="posts"></div>
+
+    <script>
+        async function loadPosts() {
+            try {
+                const response = await fetch("http://localhost:3000/api/metadata");
+                const data = await response.json();
+
+                console.log(data);
+                
+                
+                const postsContainer = document.getElementById("posts");
+                postsContainer.innerHTML = "";
+
+                data.forEach((entry) => {
+                    const post = entry.metadata;
+                    const postDiv = document.createElement("div");
+                    postDiv.className = "post";
+                    
+                    postDiv.innerHTML = `
+                        <h2>${post.title}</h2>
+                        <p class="author">Author: ${post.author}</p>
+                        <p class="date">Date: ${new Date(entry.transactionTime * 1000).toLocaleString()}</p>
+                        <img src="${post.image_url}" alt="Post image">
+                        <p class="content">${post.content}</p>
+                        <p class="others">${post.others}</p>
+                    `;
+                    
+                    postsContainer.appendChild(postDiv);
+                });
+            } catch (error) {
+                console.error("Error loading posts:", error);
+            }
+        }
+
+        // Load posts on page load
+        window.onload = loadPosts;
+    </script>
+</body>
+</html>

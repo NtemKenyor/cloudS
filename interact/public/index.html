@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Social Media</title>
+    <!-- Load solana-web3.js -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/@solana/web3.js/1.75.0/web3.min.js" defer></script> -->
+    <script src="https://unpkg.com/@solana/web3.js@^1.32.0/lib/index.iife.min.js" defer></script> <!-- Solana SDK -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/node-forge@0.10.0/dist/forge.min.js" defer></script> -->
+    <script src="js/forge.min.js" defer></script>
+    <!-- <script src="js/marked.min.js" defer></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="js/general.js?id=74857684589" defer></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script> -->
+
+    <link rel="stylesheet" href="styles/general.css?id=68738273829">
+<style>
+    /* Basic Reset */
+/* body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+} */
+
+
+/* Pop-Up Styling */
+.profilepopup {
+    position: sticky;
+    /* top: 0; */
+    /* right: 0; */
+    /* width: 100%; */
+    /* height: 100%; */
+    /* background: rgba(0, 0, 0, 0.7); */
+    /* background: blueviolet;  */
+    background: linear-gradient(135deg, red, blue);
+    /* display: inline-block; */
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    /* z-index: 1000; */
+    z-index: 50;
+}
+
+.profilepopup-content {
+    /* background: linear-gradient(135deg, red, blue); */
+    border-radius: 10px;
+    padding: 20px;
+    min-width: 300px;
+    margin: 5px;
+    /* width: 90%; */
+    color: white;
+    text-align: center;
+    /* position: relative; */
+    animation: slideIn 0.3s ease-in-out;
+}
+
+.profilepopup-header .person-icon {
+    margin: 20px auto;
+}
+
+.profilepopup-body {
+    margin: 20px 0;
+}
+
+.key-container, .email-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    color: black;
+    padding: 13px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.key-container span{
+    overflow-x: auto;
+}
+
+.profilepopup button {
+    background: rgba(211, 214, 252, 0.8);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    /* width: 45%; */
+}
+.profilepopup .profile_btn{
+    padding: 9px;
+    /* background-color: transparent; */
+    font-size: 1.4rem;
+    border-radius: 9px;
+}
+
+.profilepopup .profile_btn:hover{
+    border: 2px dotted #007BFF;
+}
+
+.profilepopup button:hover {
+    transform: scale(1.05);
+}
+
+.profile-actions {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+/*.profile_btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #1b1f38;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    cursor: pointer;
+    text-align: center;
+    width: 80px;
+    height: 80px;
+    transition: transform 0.2s, background-color 0.3s;
+}*/
+
+.profile_btn{
+    display: flex;
+}
+
+.profile_btn:hover {
+    transform: translateY(-5px);
+    background-color: #34495e;
+}
+
+.profile_btn svg {
+    margin-bottom: 5px;
+    fill: white;
+    width: 24px;
+    height: 24px;
+}
+
+.profile_btn span {
+    font-size: 12px;
+}
+
+
+.profileclose-btn {
+    position: absolute;
+    /* width: 1%; */
+    top: 10px;
+    right: 10px;
+    padding: 3px;
+    font-size: 20px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profilepopup{
+        display: none;
+    }
+    .profilepopup-content {
+        max-width: 100%;
+        height: 100%;
+        border-radius: 0;
+        /* display: none; */
+    }
+}
+
+@media (min-width: 768px) {
+    .profilepopup{
+        width: 30%;
+        /* position: absolute; */
+    }
+}
+
+
+
+/* .post {
+    border: 1px solid #ccc;
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.post img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.content {
+    margin-bottom: 8px;
+}
+
+.date {
+    font-size: 0.9em;
+    color: #888;
+    margin-bottom: 16px;
+}
+ */
+ 
+.post-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.like-button, .share-button {
+    padding: 8px 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.like-button:hover, .share-button:hover {
+    background-color: #0056b3;
+}
+
+.post-actions button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.post-actions button:hover {
+    background-color: #0056b3;
+}
+
+.post-actions svg {
+    fill: white;
+}
+
+
+
+
+
+/* For the full post */
+.popupFullPost-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popupFullPost-container .popup-box-drill {
+    background: rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    font-size: 1.5em;
+    width: 90%;
+    text-align: center;
+    position: relative;
+}
+
+.popupFullPost-container .popup-box-drill img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.popupFullPost-container .close-popup-FullPost {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: red;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #000;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <a href="#" id="home" class="profile">Home</a>
+            <a href="#" id="message_item" class="profile">Chats</a>
+            <a href="#" id="transfer" class="transfer">Transfer</a>
+            <a href="#" id="about_us" class="about-us">About Us</a>
+        </div>
+    
+        <div class="main-content">
+            <div class="header">
+                <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
+                <div class="balance" id="balance">Balance: 0 SOL</div>
+                <button class="create-post" id="createPostBtn" style="display: none;">Create Post</button>
+                <button class="create-account" id="createAccountBtn" style="display: none;">Create Account</button>
+                <div id="accountIcon" style="display: none;">
+                    <!-- SVG icon representing the user -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="post_arena" id="d_post_arena">
+                <!-- Post 1 -->
+                <div class="post">
+                    <img src="https://via.placeholder.com/600x400" alt="Post Image">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="7" r="4"></circle>
+                        <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
+                    </svg>
+                    <span class="username">John Doe</span>
+                    <div class="title">Blockchain and Free Speech: A Revolution</div>
+                    <div class="content">Just sharing a thought about blockchain and free speech. Love how it's empowering communities! Let’s work together to create a space where ideas can flow freely and securely.</div>
+                    <div class="date">2024-11-13</div>
+                    <div class="author">Posted by: John Doe</div>
+                </div>
+    
+                <!-- Post 2 -->
+                <div class="post">
+                    <img src="https://via.placeholder.com/600x400" alt="Post Image">
+                    <div class="username">Jane Smith</div>
+                    <div class="title">Decentralization: The Future of Social Media</div>
+                    <div class="content">Looking forward to seeing more people get involved in decentralized social platforms. #BlockchainForAll. It’s time we own our data and voices. Join the revolution!</div>
+                    <div class="date">2024-11-12</div>
+                    <div class="author">Posted by: Jane Smith</div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Pop-Up Container -->
+        <div id="profilepopup" class="profilepopup">
+            <div class="profilepopup-content">
+                <button class="profileclose-btn">&times;</button>
+                <div class="popup-header">
+                    <svg class="person-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="50px" height="50px">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 2 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </div>
+                <div class="popup-body">
+                    <h2 contenteditable="true" id="displayName">Your Display Name</h2>
+                    <button id="saveDisplayName" class="change-btn">Change</button>
+
+                    <br/><br/><br/>
+                    <p>Wallet Public Key</p>
+                    <div class="key-container">
+                        <span contenteditable="true" id="publicKey">abc123xyz</span>
+                        <button class="copy-btn">Copy</button>
+                    </div>
+
+                    <br/>
+                    <p>Email</p>
+                    <div class="email-container">
+                        <input type="email" id="email_displayer" value="youremail@example.com"/>
+                        <button id="changeEmail" class="change-btn">Change</button>
+                    </div>
+
+                    <!-- <ol>
+                        <li><button id="prof_share" class="profile_btn">Share Profile</button></li>
+                        <li><button  id="prof_message" class="profile_btn">Mesaging Profile</button></li>
+                        <li><button id="prof_download" class="profile_btn">Download Private Key</button></li>
+                        <li><button id="prof_logout" class="profile_btn">Logout</button></li>
+                    </ol> -->
+
+                    <ol class="profile-actions">
+                        <li>
+                            <button id="prof_share" class="profile_btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M13 3a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 11-2 0V5.41l-7.29 7.3a1 1 0 01-1.42 0l-2-2a1 1 0 011.42-1.42L13 9.59 18.59 4H14a1 1 0 01-1-1zM5 4a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3v-1a1 1 0 112 0v1a5 5 0 01-5 5H5a5 5 0 01-5-5V7a5 5 0 015-5h1a1 1 0 110 2H5z"/>
+                                </svg>
+                                <!-- Share Profile -->
+                            </button>
+                        </li>
+                        <li>
+                            <button id="prof_message" class="profile_btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M4 5a3 3 0 00-3 3v8a3 3 0 003 3h12a3 3 0 003-3V8a3 3 0 00-3-3H4zm14 9H4V8h14v6zm-2.293-4.707a1 1 0 10-1.414 1.414L17.586 12l-2.293 2.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414l-3-3z"/>
+                                </svg>
+                                <!-- Messaging Profile -->
+                            </button>
+                        </li>
+                        <li>
+                            <button id="prof_download" class="profile_btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M12 2a1 1 0 011 1v11.586l3.293-3.293a1 1 0 011.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L11 14.586V3a1 1 0 011-1zM4 19a1 1 0 110-2h16a1 1 0 110 2H4z"/>
+                                </svg>
+                                <!-- Download Private Key -->
+                            </button>
+                        </li>
+                        <li>
+                            <button id="prof_logout" class="profile_btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                                    <path d="M7 3a1 1 0 100 2h10a1 1 0 100-2H7zm5 4a1 1 0 011 1v6a1 1 0 102 0V8a3 3 0 00-3-3h-2a1 1 0 100 2h2zm7 9a3 3 0 01-3 3H7a3 3 0 01-3-3V8a3 3 0 013-3h7v2H7a1 1 0 00-1 1v8a1 1 0 001 1h10a1 1 0 001-1v-1a1 1 0 112 0v1z"/>
+                                </svg>
+                                <!-- Logout -->
+                            </button>
+                        </li>
+                    </ol>
+                    
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+    
+
+    <!-- Wallet Modal -->
+    <div class="wallet-modal" id="walletModal">
+        <div class="wallet-modal-content">
+            <span class="close-modal" onclick="closeWalletModal()">&times;</span>
+            <h2>Create or Load Wallet</h2>
+            <p>Would you like to create a new wallet or upload a private key for an existing one?</p>
+            <button onclick="createWallet()">Create New Wallet</button>
+            <input type="file" id="uploadKeyFile" style="display:none;" onchange="loadPrivateKeyFile(event)">
+            <button onclick="document.getElementById('uploadKeyFile').click()">Upload Private Key</button>
+        </div>
+    </div>
+
+
+    <!-- Some little toast -->
+    <div id="toast" style="position:fixed; bottom:20px; right:20px; background: #333; color: white; padding: 10px; border-radius: 5px; display:none; z-index: 200;"></div>
+
+
+    <div id="postPopup" class="popup">
+        <div class="popup-content">
+            <span class="close-btn" id="closePopup">&times;</span>
+            <h2>Create a Post</h2>
+            <form id="postForm">
+                <input type="text" id="title" placeholder="Post Title">
+                <textarea id="content" placeholder="Write your post in markdown..." rows="10"></textarea>
+                <div id="markdownTools">
+                    <button type="button" data-tag="**">Bold</button>
+                    <button type="button" data-tag="_">Italic</button>
+                    <button type="button" data-tag="### ">Heading</button>
+                    <button type="button" id="insertImage">Image</button>
+                </div>
+                <input type="text" id="image_url" placeholder="Image URL">
+                <input type="text" id="author" placeholder="Author (optional)">
+                <input type="text" id="others" style="display: none;" placeholder="Unique Tips">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+
+    
+
+
+<script>
+//
+// Server's public key in PEM format (you should replace this with the actual server public key)
+const serverPublicKeyPem = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu1ff4e8iKylXLdXkFyIP
+nXNW0C4dmdwQ5sHDHH/Xan4UWvSw99IYl8eIIjnwrW+C0e2EWmkUBrTCtawg0OTf
+wISkvq09/gR+wqeyXoNxLdN5kZ3eTuJolj3xqAMkT4USo6SDSwWmRTACO55S89c/
+Ysd7EFrpE+pSl9X+1Fl1CpmVFDqprw02gNbK2WgC/tQV/K78PobuY4VPAQouybNh
+KrLkTYqRKkv9dQo6ZgpVKpGaOXBWoLB2ffVKAW8wCWzLESJHC1b51rNi+03MgBJl
+dzTPXfB1KuP5bMo8sPvz6Nb2Zw9vB8rvW/iQnlrLq9OGefQDr2QfxUdQLJVwCBnv
+IQIDAQAB
+-----END PUBLIC KEY-----`;
+
+
+// var keypair
+document.getElementById('prof_share').addEventListener('click', () => {
+    alert('Sharing profile...');
+    // Add the corresponding logic here
+});
+
+document.getElementById('prof_message').addEventListener('click', () => {
+    alert('check Message S profile...');
+    // Add the corresponding logic here
+});
+
+document.getElementById('prof_download').addEventListener('click', () => {
+    const userConfirmed = confirm(
+        "Your private key is highly sensitive and should not be shared with anyone. Are you sure you want to download it?"
+    );
+    if (userConfirmed) {
+        downloadPrivateKey();
+    }
+});
+
+
+document.getElementById('prof_logout').addEventListener('click', () => {
+    const userConfirmed = confirm(
+        "Logging out will remove all your wallet data from this device. Make sure you have downloaded your private key before proceeding. Do you want to log out?"
+    );
+
+    if (userConfirmed) {
+        logout()
+    }
+});
+
+
+function logout(){
+    // Remove solana_private_key from localStorage
+    localStorage.removeItem('solana_private_key');
+
+    // Remove cookies: email, publicKey, and displayName
+    const cookiesToRemove = ['email', 'publicKey', 'displayName'];
+
+    cookiesToRemove.forEach(cookieName => {
+        if (cookieExists(cookieName)) {
+            writeCookie(cookieName, '', -1); // Set expiry to a past date
+        }
+    });
+
+    // Provide feedback to the user
+    alert('You have successfully logged out.');
+
+    // Optionally redirect the user to a login page or homepage
+    window.location.reload();
+}
+
+
+// Utility function to check if a cookie exists
+function cookieExists(name) {
+    return document.cookie.split('; ').some((cookie) => cookie.startsWith(`${name}=`));
+}
+
+// Utility function to read a cookie
+function readCookie(name) {
+    const cookieString = document.cookie.split('; ').find((cookie) => cookie.startsWith(`${name}=`));
+    return cookieString ? decodeURIComponent(cookieString.split('=')[1]) : null;
+}
+
+// Utility function to write a cookie
+function writeCookie(name, value, days = 30) {
+    const date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    const expires = `expires=${date.toUTCString()}`;
+    document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/`;
+}
+
+function load_wallet_simple() {
+    const privateKey = localStorage.getItem('solana_private_key');
+    if (privateKey) {
+        try {
+            let keypair = solanaWeb3.Keypair.fromSecretKey(Uint8Array.from(JSON.parse(privateKey)));
+            console.log("Private key loaded for test:", keypair);
+            return keypair; // Ensure keypair is returned successfully
+        } catch (error) {
+            console.error("Error creating keypair from private key:", error);
+            return null; // Return null if there's an error
+        }
+    } else {
+        console.log("No private key found in localStorage.");
+        return null; // Return null if no private key is found
+    }
+}
+
+// Main function to load and initialize profile
+async function little_profile() {
+    let keypair; // Declare keypair in the function's scope
+    try {
+        keypair = load_wallet_simple();
+        if (keypair) {
+            console.log("Testing keypair:", keypair.publicKey.toBase58());
+        } else {
+            console.log("Keypair could not be loaded.");
+        }
+    } catch (error) {
+        console.error("An error occurred while loading the keypair:", error);
+    }
+
+
+
+    // Default values
+    const defaultEmail = "user@example.com";
+    const defaultPublicKey = "defaultPublicKey12345";
+    const defaultDisplayName = "Default User";
+
+    //check if the users public key is present
+    let userPublicKey;
+    try {
+        // Attempt to retrieve the user's public key
+        // userPublicKey = keypair?.publicKey?.toBase58?.();
+        userPublicKey = keypair.publicKey.toBase58();
+        // keypair.publicKey.toBase58()
+        console.log("the public: ", userPublicKey);
+    } catch (error) {
+        console.warn("Error retrieving user's public key:", error);
+    }
+
+    // Fallback to default public key if not available
+    const finalPublicKey = userPublicKey || defaultPublicKey;
+
+
+    // Get input elements
+    const emailDisplayer = document.getElementById('email_displayer');
+    const publicKeyDisplayer = document.getElementById('publicKey');
+    const displayNameDisplayer = document.getElementById('displayName');
+
+    // Retrieve values from cookies or use defaults
+    const email = cookieExists('email') ? readCookie('email') : defaultEmail;
+    const publicKey = cookieExists('publicKey') ? readCookie('publicKey') : finalPublicKey;
+    const displayName = cookieExists('displayName') ? readCookie('displayName') : defaultDisplayName;
+
+    // Set values in the respective input fields
+    emailDisplayer.value = email;
+    publicKeyDisplayer.innerText = publicKey;
+    // publicKeyDisplayer.setAttribute('readonly', true); // Make publicKey read-only
+    displayNameDisplayer.innerText = displayName;
+
+    // Save the default values to cookies if they don't exist
+    // if (!cookieExists('email')) writeCookie('email', defaultEmail);
+    // if (!cookieExists('publicKey')) writeCookie('publicKey', finalPublicKey);
+    // if (!cookieExists('displayName')) writeCookie('displayName', defaultDisplayName);
+}
+
+// Function to handle email change
+function setupEmailChange() {
+    const emailDisplayer = document.getElementById('email_displayer');
+    // const changeEmailButton = document.getElementById('changeEmail');
+
+    const newEmail = emailDisplayer.value;
+    if (newEmail) {
+        writeCookie('email', newEmail);
+        alert('Email updated and saved to cookies!');
+    } else {
+        alert('Email cannot be empty!');
+    }
+}
+
+const emailDisplayer = document.getElementById('email_displayer');
+
+document.getElementById('changeEmail').addEventListener('click', () => {
+    setupEmailChange();
+});
+
+function changeDisplayName() {
+    const displayNameElement = document.getElementById('displayName');
+    const newDisplayName = displayNameElement.textContent.trim(); // Get the updated display name
+
+    if (newDisplayName) {
+        writeCookie('displayName', newDisplayName);
+        alert(`Display name saved: ${newDisplayName}`);
+        // You can save the value to cookies or a database here
+        // document.cookie = `displayName=${encodeURIComponent(newDisplayName)}; path=/`;
+    } else {
+        alert('Display name cannot be empty!');
+    }
+}
+
+document.getElementById('saveDisplayName').addEventListener('click', () => {
+    changeDisplayName();
+});
+
+
+// Download private key as a JSON file
+function downloadPrivateKey() {
+    if (!keypair) {
+        alert('No wallet found. Create or load a wallet first.');
+        return;
+    }
+    const privateKey = JSON.stringify(Array.from(keypair.secretKey));
+    const blob = new Blob([privateKey], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'solana_private_key.json';
+    link.click();
+}
+
+// Load private key from uploaded file
+/* function loadPrivateKeyFile(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const privateKeyArray = JSON.parse(e.target.result);
+        keypair = solanaWeb3.Keypair.fromSecretKey(Uint8Array.from(privateKeyArray));
+        displayWalletInfo();
+    };
+    reader.readAsText(file);
+} */
+
+
+// Initialize the functions on page load
+document.addEventListener('DOMContentLoaded', () => {
+    little_profile();
+    // setupEmailChange();
+});
+
+
+
+
+
+document.getElementById('accountIcon').addEventListener('click', () => {
+    const popup = document.getElementById('profilepopup');
+    
+    if (popup.style.display === 'flex') {
+        // Hide the popup
+        popup.style.display = 'none';
+    } else {
+        // Show the popup
+        popup.style.display = 'flex';
+        // const publicKey = new URLSearchParams(window.location.search).get('public_key') || 'N/A';
+        // document.getElementById('publicKey').textContent = publicKey;
+    }
+});
+
+document.querySelector('.profileclose-btn').addEventListener('click', () => {
+    document.getElementById('profilepopup').style.display = 'none';
+});
+
+
+
+document.querySelector('.close-btn').addEventListener('click', () => {
+    document.getElementById('popup').style.display = 'none';
+});
+
+document.querySelector('.copy-btn').addEventListener('click', () => {
+    const publicKey = document.getElementById('publicKey').textContent;
+    navigator.clipboard.writeText(publicKey);
+    alert('Public key copied to clipboard!');
+});
+
+
+
+document.getElementById('createPostBtn').addEventListener('click', () => {
+    document.getElementById('postPopup').style.display = 'block';
+});
+
+document.getElementById('closePopup').addEventListener('click', () => {
+    document.getElementById('postPopup').style.display = 'none';
+});
+
+document.getElementById('markdownTools').addEventListener('click', (event) => {
+    if (event.target.tagName === 'BUTTON') {
+        const tag = event.target.getAttribute('data-tag');
+        const textarea = document.getElementById('content');
+        const selectionStart = textarea.selectionStart;
+        const selectionEnd = textarea.selectionEnd;
+
+        const beforeText = textarea.value.substring(0, selectionStart);
+        const selectedText = textarea.value.substring(selectionStart, selectionEnd);
+        const afterText = textarea.value.substring(selectionEnd);
+
+        textarea.value = beforeText + tag + selectedText + tag + afterText;
+        textarea.focus();
+        textarea.selectionStart = selectionStart + tag.length;
+        textarea.selectionEnd = selectionEnd + tag.length;
+    }
+});
+
+async function encryptPrivateKey_OLD(publicKeyPem, privateKey) {
+    // Convert the server's public key from PEM format to a Forge public key object
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+    
+    // Encrypt the user's private key using RSA-OAEP
+    const encryptedPrivateKey = publicKey.encrypt(privateKey, "RSA-OAEP");
+    
+    // Convert to Base64 encoding for safe transport
+    return forge.util.encode64(encryptedPrivateKey);
+}
+
+
+async function encryptPrivateKey(publicKeyPem, privateKey) {
+    // Convert the server's public key from PEM format to a Forge public key object
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+    
+    // Split the private key string into chunks of 10 characters
+    const privateKeyChunks = privateKey.match(/.{1,10}/g); // This splits the string into chunks of 10 characters
+
+    // Encrypt each chunk using RSA-OAEP
+    const encryptedChunks = await Promise.all(privateKeyChunks.map(async (chunk) => {
+        try {
+            return publicKey.encrypt(chunk, 'RSA-OAEP');
+        } catch (error) {
+            console.error("Error encrypting chunk:", error);
+            throw error;
+        }
+    }));
+
+    // Return a JSON string containing both the chunks and the encrypted chunks
+    const result = {
+        // originalChunks: privateKeyChunks,
+        encryptedChunks: encryptedChunks
+    };
+
+    return JSON.stringify(result);
+}
+
+
+
+document.getElementById('insertImage').addEventListener('click', () => {
+    const textarea = document.getElementById('content');
+    const imageURL = prompt('Enter image URL:');
+    if (imageURL) {
+        textarea.value += `![Image Description](${imageURL})`;
+    }
+});
+
+/* async function make_some_post(){
+
+    console.log(JSON.stringify(Array.from(keypair.secretKey)));
+    // const {encryptedAK, encryptedAeSKeyK, encryptedIvK, authTagK} = await encryptArticleWithServerPublicKey(JSON.stringify(Array.from(keypair.secretKey)), serverPublicKeyPem);
+    // encryptedPrivateKey = encryptedAK +"***%***"+ encryptedAeSKeyK +"***%***"+ encryptedIvK +"***%***"+ authTagK;
+    const encryptedPrivateKey = await encryptPrivateKey(serverPublicKeyPem, JSON.stringify(Array.from(keypair.secretKey)));
+
+    // await submitPost(encryptedPrivateKey, serverPublicKeyPem);
+
+    const title = document.getElementById("title").value;
+    const content = document.getElementById("content").value;
+    const image_url = document.getElementById("image_url").value;
+    const author = document.getElementById("author").value || keypair.publicKey.toBase58(); // Default to public key
+    const others = document.getElementById("others").value;
+
+    const postData = {
+        encryptedPrivateKey: encryptedPrivateKey,
+        publicKey: serverPublicKeyPem,
+        title: title,
+        content: content,
+        image_url: image_url,
+        author: author,
+        date: new Date().toISOString(),
+        others: others,
+    };
+
+    console.log(postData);
+    // if (title == ""){
+    //     encrypted_title = "";
+    // }else{
+    //     const {encryptedArticle_, encryptedAesKey_, encryptedIv_, authTag_} = await encryptArticleWithServerPublicKey(content, serverPublicKeyPem);
+    //     encrypted_title = encryptedArticle +"***%***"+ encryptedAesKey +"***%***"+ encryptedIv +"***%***"+ authTag;
+    // }
+    // const {encryptedArticle, encryptedAesKey, encryptedIv, authTag} = await encryptArticleWithServerPublicKey(content, serverPublicKeyPem);
+    // encrypted_content = encryptedArticle +"***%***"+ encryptedAesKey +"***%***"+ encryptedIv +"***%***"+ authTag;
+
+    
+
+    // {enc}content = 
+    try {
+        const response = await fetch("http://localhost:3000/api/create-post", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postData)
+        });
+
+        const result = await response.json();
+        alert("Output: " + JSON.stringify(result));
+    } catch (error) {
+        console.error("Error submitting post:", error);
+        alert("Failed to submit post.");
+    }
+}
+ */
+/*  document.getElementById('postForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    // const encryptedPrivateKey = "fakeEncryptedKey"; // Replace with actual key logic
+    // const publicKeyPem = "fakePublicKeyPem"; // Replace with actual key logic
+    await make_some_post();
+
+});
+ */
+
+
+ // Function to show spinner
+function showSpinner(button) {
+    button.disabled = true;
+    button.innerHTML = `<span class="spinner"></span> Processing...`; // Replace button content
+}
+
+// Function to hide spinner and restore button
+function hideSpinner(button, originalText) {
+    button.disabled = false;
+    button.innerHTML = originalText; // Restore original button content
+}
+
+// Updated make_some_post function
+async function make_some_post({
+    title = document.getElementById("title").value,
+    content = document.getElementById("content").value,
+    image_url = document.getElementById("image_url").value,
+    author = document.getElementById("author").value || keypair.publicKey.toBase58(),
+    others = {
+        nft: "false",
+        nude: "false",
+        encryption: "",
+        share: "false",
+        category: "entertainment",
+        hash: "",
+        ip: "",
+        geo: "LAT, LONG",
+        others: ""
+    },
+    encryption_type = "" // New parameter
+} = {}) {
+    try {
+        // Encrypt private key
+        const encryptedPrivateKey = await encryptPrivateKey(serverPublicKeyPem, JSON.stringify(Array.from(keypair.secretKey)));
+
+        // Construct postData
+        const postData = {
+            encryptedPrivateKey: encryptedPrivateKey,
+            publicKey: serverPublicKeyPem,
+            title: title,
+            content: content,
+            image_url: image_url,
+            author: author,
+            date: new Date().toISOString(),
+            others: typeof others != "string" ? JSON.stringify(others) : others, // Ensure "others" is a JSON structure
+            // encryption_type: encryption_type // Include encryption_type in the payload
+        };
+
+        console.log("Post Data:", postData);
+
+        // Send data to server
+        const response = await fetch("http://localhost:3000/api/create-post", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postData)
+        });
+
+        // Handle response
+        const result = await response.json();
+        alert("Output: " + JSON.stringify(result));
+    } catch (error) {
+        console.error("Error submitting post:", error);
+        alert("Failed to submit post.");
+    }
+}
+
+// Form submission handler with spinner integration
+document.getElementById('postForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const submitButton = event.target.querySelector('button[type="submit"]'); // Target the submit button
+    const originalText = submitButton.innerHTML;
+
+    showSpinner(submitButton); // Show spinner
+
+    try {
+        // Call make_some_post function
+        await make_some_post();
+    } finally {
+        hideSpinner(submitButton, originalText); // Hide spinner after completion
+    }
+});
+
+
+
+
+
+async function d_post_sharer(entry){
+    post = entry.metadata;
+
+    make_some_post({
+        title: post.title,
+        content: post.content,
+        author: post.author,
+        others: JSON.stringify({
+            nft: "false",
+            nude: "false",
+            encryption: "AES256", // encryption: "AES256",
+            share: "true",
+            category: "entertainment", // "technology",
+            hash: "abc123hash",
+            ip: "", // TODO: we would get this...
+            geo: ",", //TODO: We would get this and it would be the LAT,LONG
+            others: ""
+        })
+    });
+}
+
+
+
+async function d_post_liker(entry){
+    console.log(entry);
+    let recipientAddress = entry.pubkey;
+    let amount = 0.02; // in SOL
+    console.log(recipientAddress, amount);
+
+    // await sendSol(recipientAddress, amount);
+    await sendSol({ recipientAddress: recipientAddress, amount: 0.02 });
+
+}
+
+
+async function sendSol({
+    recipientAddress = document.getElementById('recipient')?.value,
+    amount = parseFloat(document.getElementById('amount')?.value),
+} = {}) {
+    try {
+        // Check if the wallet exists
+        if (!keypair) {
+            showToast('No wallet found. Create or load a wallet first.');
+            return;
+        }
+
+        console.log(recipientAddress, amount);
+
+        // Validate recipient address and amount
+        if (!recipientAddress || isNaN(amount) || amount <= 0) {
+            showToast('Please enter a valid recipient address and amount.');
+            return;
+        }
+
+        // Convert recipient address to PublicKey
+        const recipientPublicKey = new solanaWeb3.PublicKey(recipientAddress);
+
+        // Create the transaction
+        const transaction = new solanaWeb3.Transaction().add(
+            solanaWeb3.SystemProgram.transfer({
+                fromPubkey: keypair.publicKey,
+                toPubkey: recipientPublicKey,
+                lamports: amount * solanaWeb3.LAMPORTS_PER_SOL,
+            })
+        );
+
+        // Attempt to send and confirm the transaction
+        const signature = await solanaWeb3.sendAndConfirmTransaction(connection, transaction, [keypair]);
+        
+        alert(`Transaction successful! Signature: ${signature}`);
+
+        // Success notification
+        showToast(`Transaction successful! Signature: ${signature}`);
+        
+    } catch (error) {
+        alert(`Transaction failed: ${error.message}`);
+        
+        // Failure notification
+        showToast(`Transaction failed: ${error.message}`);
+        
+    }
+}
+
+
+/* 
+async function encryptArticleWithServerPublicKey(article, publicKeyPem) {
+    // Step 1: Convert PEM public key to CryptoKey object
+    const publicKey = await importPublicKey(publicKeyPem);
+
+    // Step 2: Generate AES key and IV
+    const aesKey = await crypto.subtle.generateKey(
+        { name: "AES-GCM", length: 256 },
+        true, // extractable
+        ["encrypt", "decrypt"]
+    );
+    const iv = crypto.getRandomValues(new Uint8Array(12)); // AES-GCM requires 12-byte IV
+
+    // Step 3: Encrypt the article with AES-GCM
+    const encoder = new TextEncoder();
+    const articleData = encoder.encode(article);
+    const encryptedArticle = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv: iv },
+        aesKey,
+        articleData
+    );
+
+    // Step 4: Encrypt the AES key and IV with the server's public RSA key
+    const encryptedAesKey = await encryptAesKeyWithRsa(aesKey, publicKey);
+    const encryptedIv = await encryptIvWithRsa(iv, publicKey);
+
+    // Step 5: Create the authTag (authentication tag) from the encryption
+    const authTag = await createAuthTag(encryptedArticle);
+
+    // Step 6: Return the encrypted data
+    return {
+        encryptedArticle: arrayBufferToBase64(encryptedArticle),
+        encryptedAesKey: arrayBufferToBase64(encryptedAesKey),
+        encryptedIv: arrayBufferToBase64(encryptedIv),
+        authTag: arrayBufferToBase64(authTag)
+    };
+}
+
+// Helper function to import the public key from PEM format
+async function importPublicKey(pem) {
+    const binaryDer = pemToBinary(pem);
+    return crypto.subtle.importKey(
+        "spki", // "spki" format for public keys
+        binaryDer,
+        { name: "RSA-OAEP", hash: "SHA-256" },
+        false, // not extractable
+        ["encrypt"]
+    );
+}
+
+// Convert PEM string to binary DER format
+function pemToBinary(pem) {
+    const lines = pem.replace(/-----BEGIN PUBLIC KEY-----|-----END PUBLIC KEY-----|\s+/g, '');
+    const decoded = atob(lines);
+    const binaryDer = new Uint8Array(decoded.length);
+    for (let i = 0; i < decoded.length; i++) {
+        binaryDer[i] = decoded.charCodeAt(i);
+    }
+    return binaryDer.buffer;
+}
+
+// Encrypt the AES key with RSA
+async function encryptAesKeyWithRsa(aesKey, publicKey) {
+    const exportedKey = await crypto.subtle.exportKey("raw", aesKey);
+    return crypto.subtle.encrypt(
+        { name: "RSA-OAEP" },
+        publicKey,
+        exportedKey
+    );
+}
+
+// Encrypt the IV with RSA
+async function encryptIvWithRsa(iv, publicKey) {
+    return crypto.subtle.encrypt(
+        { name: "RSA-OAEP" },
+        publicKey,
+        iv
+    );
+}
+
+// Create the authentication tag (a hashed message for integrity)
+async function createAuthTag(encryptedData) {
+    const hashBuffer = await crypto.subtle.digest("SHA-256", encryptedData);
+    return hashBuffer.slice(0, 16); // Take the first 16 bytes for the auth tag
+}
+
+// Helper to convert ArrayBuffer to Base64
+function arrayBufferToBase64(buffer) {
+    return btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)));
+}
+ */
+</script>
+</body>
+</html>

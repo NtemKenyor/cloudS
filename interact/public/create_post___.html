@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Create Post</title>
+    <script src="https://cdn.jsdelivr.net/npm/node-forge@0.10.0/dist/forge.min.js"></script>
+</head>
+<body>
+    <h2>Create a Post</h2>
+    <form id="postForm">
+        <input type="text" id="title" placeholder="Title" required><br><br>
+        <input type="text" id="content" placeholder="Content" required><br><br>
+        <input type="text" id="image_url" placeholder="Image URL" required><br><br>
+        <input type="text" id="author" placeholder="Author" required><br><br>
+        <input type="date" id="date" required><br><br>
+        <input type="text" id="others" placeholder="Other Metadata" required><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        async function generateKeypair() {
+            // This function would simple return the users wallet in the format below if the user has a wallet or it would ask the user to create a wallet
+            // Generate a simple example private key (in practice, use an actual key generation function)
+            const keypair = {
+                publicKey: "fake_public_key_for_testing",
+                privateKey: JSON.stringify([1, 2, 3, 4]) // Placeholder; replace with actual key bytes
+            };
+            return keypair;
+        }
+
+        async function encryptPrivateKey(publicKeyPem, privateKey) {
+            // Convert the server's public key from PEM format to a Forge public key object
+            const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+            
+            // Encrypt the user's private key using RSA-OAEP
+            const encryptedPrivateKey = publicKey.encrypt(privateKey, "RSA-OAEP");
+            
+            // Convert to Base64 encoding for safe transport
+            return forge.util.encode64(encryptedPrivateKey);
+        }
+
+        async function encryptPrivateKey(publicKeyPem, privateKey) {
+            // Convert the server's public key from PEM format to a Forge public key object
+            const publicKey = forge.pki.publicKeyFromPem(publicKeyPem);
+            
+            // Encrypt the user's private key using RSA-OAEP
+            const encryptedPrivateKey = publicKey.encrypt(privateKey, "RSA-OAEP");
+            
+            // Convert to Base64 encoding for safe transport
+            return forge.util.encode64(encryptedPrivateKey);
+        }
+
+
+        async function submitPost(encryptedPrivateKey, publicKeyPem) {
+            const title = document.getElementById("title").value;
+            const content = document.getElementById("content").value;
+            const image_url = document.getElementById("image_url").value;
+            const author = document.getElementById("author").value;
+            const date = document.getElementById("date").value;
+            const others = document.getElementById("others").value;
+
+            // Prepare data payload
+            const postData = {
+                encryptedPrivateKey: encryptedPrivateKey,
+                publicKey: publicKeyPem,
+                title: title,
+                content: content,
+                image_url: image_url,
+                author: author,
+                date: date,
+                others: others
+            };
+
+            // Send the encrypted private key and other post data to the server
+            const response = await fetch("http://localhost:3000/api/create-post", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(postData)
+            });
+
+            const result = await response.json();
+            console.log(result);
+            alert("Response: " + JSON.stringify(result));
+        }
+
+        document.getElementById("postForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            // Server's public key in PEM format (you should replace this with the actual server public key)
+            const serverPublicKeyPem = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu1ff4e8iKylXLdXkFyIP
+nXNW0C4dmdwQ5sHDHH/Xan4UWvSw99IYl8eIIjnwrW+C0e2EWmkUBrTCtawg0OTf
+wISkvq09/gR+wqeyXoNxLdN5kZ3eTuJolj3xqAMkT4USo6SDSwWmRTACO55S89c/
+Ysd7EFrpE+pSl9X+1Fl1CpmVFDqprw02gNbK2WgC/tQV/K78PobuY4VPAQouybNh
+KrLkTYqRKkv9dQo6ZgpVKpGaOXBWoLB2ffVKAW8wCWzLESJHC1b51rNi+03MgBJl
+dzTPXfB1KuP5bMo8sPvz6Nb2Zw9vB8rvW/iQnlrLq9OGefQDr2QfxUdQLJVwCBnv
+IQIDAQAB
+-----END PUBLIC KEY-----`;
+
+            const keypair = await generateKeypair();
+            const encryptedPrivateKey = await encryptPrivateKey(serverPublicKeyPem, keypair.privateKey);
+
+            await submitPost(encryptedPrivateKey, serverPublicKeyPem);
+        });
+    </script>
+</body>
+</html>
