@@ -101,11 +101,30 @@
             }
         }
 
+        // var NODE_URL = "http://localhost:3000";
+        // Initialize global variables using the window object
+        if (
+            window.location.hostname === "localhost" || 
+            window.location.hostname.startsWith("127.") || 
+            window.location.hostname === "0.0.0.0"
+        ) {
+            // Use localhost URLs
+            window.NODE_URL = "http://localhost:3000";
+            window.PHP_URL = "http://localhost";
+        } else {
+            // Use live URLs
+            window.NODE_URL = "https://roynek.com/cloudS/interact/backend";
+            window.PHP_URL = "https://roynek.com/cloudS/interact/server";
+        }
+
+        // Log the current URLs being used for easy tracking
+        console.log("Current NODE_URL:", window.NODE_URL);
+        console.log("Current PHP_URL:", window.PHP_URL);
 
 
         /* async function loadPosts() {
             try {
-                const response = await fetch("http://localhost:3000/api/metadata");
+                const response = await fetch(window.NODE_URL+"/api/metadata");
                 const data = await response.json();
         
                 console.log("Fetched Data:", data);
@@ -182,7 +201,7 @@
 
         async function loadPosts() {
             try {
-                const response = await fetch("http://localhost:3000/api/metadata");
+                const response = await fetch( window.NODE_URL+"/api/metadata");
                 const data = await response.json();
 
                 console.log("Fetched Data:", data);
