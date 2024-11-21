@@ -14,11 +14,17 @@ const PORT = 3000;
 const serverPrivateKeyPem = process.env.SERVER_PRIVATE_KEY;
 const serverPublicKeyPem = process.env.SERVER_PUBLIC_KEY;
 
+let MAIN_DIR = "/cloudS/interact/backend";
 
 app.use(cors());
 app.use(express.json());
 
-app.get("/api/metadata", async (req, res) => {
+// Serve "Hello World" at /sonic_universe/client/sonic_planet/api/
+app.get(MAIN_DIR+'/', (req, res) => {
+    res.send('Entrace Point - Hello world');
+});
+
+app.get(MAIN_DIR+"/api/metadata", async (req, res) => {
     const metadata = await fetchMetadataForAccounts();
     res.json(metadata);
 });
@@ -62,7 +68,7 @@ async function decryptPrivateKey(privateKeyPem, encryptedPrivateKeyJson) {
 
 
 
-app.post("/api/create-post", async (req, res) => {
+app.post(MAIN_DIR+"/api/create-post", async (req, res) => {
     const { encryptedPrivateKey, publicKey, title, content, image_url, author, date, others } = req.body;
 
     if (!encryptedPrivateKey || !publicKey || !content) {

@@ -11,10 +11,10 @@
     <script src="js/forge.min.js" defer></script>
     <!-- <script src="js/marked.min.js" defer></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-    <script src="js/general.js?id=9484589" defer></script>
+    <script src="js/general.js?id=859857485" defer></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script> -->
 
-    <link rel="stylesheet" href="styles/general.css?id=7485738">
+    <link rel="stylesheet" href="styles/general.css?id=89437347483">
 <style>
     /* Basic Reset */
 /* body, html {
@@ -361,7 +361,7 @@
                 <button class="menu-btn" onclick="toggleSidebar()">&#9776;</button>
                 <div class="balance" id="balance">Balance: 0 SOL</div>
                 <button class="create-post" id="createPostBtn" style="display: none;">Create Post</button>
-                <button class="create-account" id="createAccountBtn" style="display: none;">Create Account</button>
+                <button class="create-account" id="createAccountBtn" style="display: none;">Create Wallet</button>
                 <div id="accountIcon" style="display: none;">
                     <!-- SVG icon representing the user -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -379,8 +379,8 @@
                         <path d="M5.5 21h13a8.4 8.4 0 0 0-13 0z"></path>
                     </svg>
                     <span class="username">John Doe</span>
-                    <div class="title">Blockchain and Free Speech: A Revolution</div>
-                    <div class="content">Just sharing a thought about blockchain and free speech. Love how it's empowering communities! Let’s work together to create a space where ideas can flow freely and securely.</div>
+                    <div class="title">Processing Title...</div>
+                    <div class="content">Just sharing a thought about blockchain and free speech. Loading...</div>
                     <div class="date">2024-11-13</div>
                     <div class="author">Posted by: John Doe</div>
                 </div>
@@ -389,7 +389,7 @@
                 <div class="post">
                     <img src="https://via.placeholder.com/600x400" alt="Post Image">
                     <div class="username">Jane Smith</div>
-                    <div class="title">Decentralization: The Future of Social Media</div>
+                    <div class="title">Post Processing...</div>
                     <div class="content">Looking forward to seeing more people get involved in decentralized social platforms. #BlockchainForAll. It’s time we own our data and voices. Join the revolution!</div>
                     <div class="date">2024-11-12</div>
                     <div class="author">Posted by: Jane Smith</div>
@@ -862,6 +862,10 @@ document.getElementById('insertImage').addEventListener('click', () => {
     }
 });
 
+
+
+var NODE_URL = "http://localhost:3000";
+
 /* async function make_some_post(){
 
     console.log(JSON.stringify(Array.from(keypair.secretKey)));
@@ -902,7 +906,7 @@ document.getElementById('insertImage').addEventListener('click', () => {
 
     // {enc}content = 
     try {
-        const response = await fetch("http://localhost:3000/api/create-post", {
+        const response = await fetch(NODE_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -980,7 +984,7 @@ async function make_some_post({
         console.log("Post Data:", postData);
 
         // Send data to server
-        const response = await fetch("http://localhost:3000/api/create-post", {
+        const response = await fetch(NODE_URL+"/api/create-post", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
