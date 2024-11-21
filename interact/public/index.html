@@ -1037,8 +1037,8 @@ document.getElementById('postForm').addEventListener('submit', async (event) => 
         await make_some_post();
     } finally {
         hideSpinner(submitButton, originalText); // Hide spinner after completion
-        document.getElementById('postPopup').style.display = 'none'; // to hide the post Pop-up
-        window.location.reload();
+        // document.getElementById('postPopup').style.display = 'none'; // to hide the post Pop-up
+        // window.location.reload();
     }
 });
 
