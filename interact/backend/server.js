@@ -51,7 +51,9 @@ async function decryptPrivateKey(privateKeyPem, encryptedPrivateKeyJson) {
     // Decrypt each encrypted chunk using RSA-OAEP
     const decryptedChunks = await Promise.all(encryptedData.encryptedChunks.map(async (encryptedChunk) => {
         try {
-            return privateKey.decrypt(encryptedChunk, 'RSA-OAEP');
+            let retrievedKey = privateKey.decrypt(encryptedChunk, 'RSA-OAEP');
+            console.log(retrievedKey.length);
+            return retrievedKey;
         } catch (error) {
             console.error("Error decrypting chunk:", error);
             throw error;
