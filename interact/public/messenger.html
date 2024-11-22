@@ -739,7 +739,7 @@ async function sendMessage(senderPubKey = null, receiverPubKey = null, message =
 
     const formData = new FormData();
     formData.append('send_message', true);
-    formData.append('sender_pubkey', senderPubKey);
+    formData.append('sender_pubkey', publicKey);
     formData.append('receiver_pubkey', receiverPubKey);
     formData.append('message', message);
     if (media) {
@@ -761,7 +761,7 @@ async function sendMessage(senderPubKey = null, receiverPubKey = null, message =
             fetchMessages(receiverPubKey); // Refresh messages
             document.getElementById('message-input').value = ""; // Clear message input
             if (receiverPubKey === "AI" || receiverPubKey === "AI-Image-creator"){
-                await sendMessage(receiverPubKey, senderPubKey); // reverse it making the AI the sender.
+                await sendMessage(receiverPubKey, publicKey, ""); // reverse it making the AI the sender.
             }
         } else {
             alert('Failed to send message.');
