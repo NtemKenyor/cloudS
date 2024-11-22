@@ -661,7 +661,7 @@ async function fetchMessages(user) {
 }
 
 // Send a message
-async function sendMessage() {
+/* async function sendMessage() {
     const urlParams = new URLSearchParams(window.location.search);
     const receiverKey = urlParams.get('receiver_publickey');
 
@@ -701,6 +701,73 @@ async function sendMessage() {
         console.error('Error sending message:', error);
     }
 }
+ */
+
+
+
+// Send a message
+async function sendMessage(senderPubKey = null, receiverPubKey = null, message = "", media = null) {
+    // If parameters are not provided, fallback to fetching from DOM or URL
+    if (!receiverPubKey) {
+        const urlParams = new URLSearchParams(window.location.search);
+        receiverPubKey = urlParams.get('receiver_publickey');
+    }
+
+    if (!senderPubKey) {
+        senderPubKey = publicKey;  // Assume `publicKey` is a global variable
+    }
+
+    if (!receiverPubKey) {
+        alert('Please select a receiver to start chatting.');
+        return;
+    }
+
+    // If message is empty, fallback to the input field's value
+    if (!message) {
+        message = document.getElementById('message-input').value;
+    }
+
+    // If media is not provided, fallback to the file input
+    if (!media) {
+        media = document.getElementById('media-input').files[0];
+    }
+
+    const formData = new FormData();
+    formData.append('send_message', true);
+    formData.append('sender_pubkey', senderPubKey);
+    formData.append('receiver_pubkey', receiverPubKey);
+    formData.append('message', message);
+    if (media) {
+        formData.append('media', media);
+    }
+
+    try {
+        const response = await fetch(baseUrl, {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+
+        console.log(result);
+
+        // Check if the status is "True"
+        if (result.status === "True") {
+            alert('Message sent successfully!');
+            fetchMessages(receiverPubKey); // Refresh messages
+            document.getElementById('message-input').value = ""; // Clear message input
+            if (receiverPubKey === "AI" || receiverPubKey === "AI-Image-creator"){
+                await sendMessage(receiverPubKey, senderPubKey); // reverse it making the AI the sender.
+            }
+        } else {
+            alert('Failed to send message.');
+        }
+    } catch (error) {
+        console.error('Error sending message:', error);
+        alert('An error occurred while sending the message.');
+    }
+}
+
+
 
 </script>
 

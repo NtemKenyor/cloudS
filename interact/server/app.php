@@ -124,7 +124,7 @@ function sendMessage($sender_pubkey, $receiver_pubkey, $message, $category = 'ch
         $stmt->execute();
 
         if ($stmt->affected_rows > 0) {
-            echo json_encode(["message" => "Message sent successfully"]);
+            echo json_encode(["status" => "True", "message" => "Message sent successfully"]);
         } else {
             echo json_encode(["error" => "Failed to send message"]);
         }
