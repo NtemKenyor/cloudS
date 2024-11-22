@@ -33,6 +33,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Send a message
 /* function sendMessage($sender_pubkey, $receiver_pubkey, $message, $category = 'chart', $media_src = null, $addon = null) {
     try {
+        // $conn = getDbConnection();
+        echo "entered here";
+        // Check message limit for free users
+        $query = "SELECT COUNT(*) FROM charts WHERE sender_pubkey = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $sender_pubkey);
+        $stmt->execute();
+        $stmt->bind_result($messageCount);
+        $stmt->fetch();
+        // $stmt->close();
+
+        echo "entered here2";
+
+        $freeLimit = 5;
+        if ($messageCount >= $freeLimit) {
+            echo json_encode(["error" => "Free message limit exceeded"]);
+            return;
+        }
+
+        // Insert the message
+        $query = "INSERT INTO charts (sender_pubkey, receiver_pubkey, message, category, media_src, addon)
+                  VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ssssss", $sender_pubkey, $receiver_pubkey, $message, $category, $media_src, $addon);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            echo json_encode(["message" => "Message sent successfully"]);
+        } else {
+            echo json_encode(["error" => "Failed to send message"]);
+        }
+        $stmt->close();
+    } catch (Exception $e) {
+        echo json_encode(["error" => $e->getMessage()]);
+    }
+} */
+function sendMessage($sender_pubkey, $receiver_pubkey, $message, $category = 'chart', $media_src = null, $addon = null) {
+    try {
         $conn = getDbConnection(); // Ensure the database connection is established
 
         // echo "entered here";
@@ -78,66 +116,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         echo json_encode(["error" => $e->getMessage()]);
     }
-} */
+}
 
-function sendMessage($sender_pubkey, $receiver_pubkey, $message, $category = 'chart', $media_src = null, $addon = null) {
+
+
+// Fetch all messages for a public key
+/* function fetchMessages($pubkey, $r_pubkey, $category = null) {
     try {
-        $conn = getDbConnection(); // Ensure the database connection is established
+        $conn = getDbConnection();
 
-        // Handle AI-specific logic
-        if ($sender_pubkey === 'AI') {
-            $aiResponse = getOpenAIReply($message); // Generate AI response
-            $message = $aiResponse; // Use the AI response as the message
-        } elseif ($sender_pubkey === 'AI-Image-creator') {
-            $imageURL = generateOpenAIImage($message); // Generate AI image
-            $media_src = $imageURL; // Use the image URL as media source
+        $query = "SELECT * FROM charts WHERE sender_pubkey = ? OR receiver_pubkey = ?";
+        $params = [$pubkey, $pubkey];
+        $types = "ss";
+
+        if ($category) {
+            $query .= " AND category = ?";
+            $params[] = $category;
+            $types .= "s";
         }
 
-        // Check message limit for free users
-        $query = "SELECT COUNT(*) AS message_count FROM charts WHERE sender_pubkey = ? AND receiver_pubkey = ?";
         $stmt = $conn->prepare($query);
-        if (!$stmt) {
-            throw new Exception("Failed to prepare SELECT statement: " . $conn->error);
-        }
-        $stmt->bind_param("ss", $sender_pubkey, $receiver_pubkey);
+        $stmt->bind_param($types, ...$params);
         $stmt->execute();
-
         $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        $messageCount = $row['message_count'] ?? 0;
-        $stmt->close(); // Ensure the statement is closed
 
-        $freeLimit = 5;
-        if ($messageCount >= $freeLimit) {
-            echo json_encode(["error" => "Free message limit exceeded"]);
-            return;
-        }
+        $messages = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode($messages);
 
-        // Insert the message
-        $query = "INSERT INTO charts (sender_pubkey, receiver_pubkey, message, category, media_src, addon)
-                  VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = $conn->prepare($query);
-        if (!$stmt) {
-            throw new Exception("Failed to prepare INSERT statement: " . $conn->error);
-        }
-        $stmt->bind_param("ssssss", $sender_pubkey, $receiver_pubkey, $message, $category, $media_src, $addon);
-        $stmt->execute();
-
-        if ($stmt->affected_rows > 0) {
-            echo json_encode(["message" => "Message sent successfully"]);
-        } else {
-            echo json_encode(["error" => "Failed to send message"]);
-        }
         $stmt->close();
     } catch (Exception $e) {
         echo json_encode(["error" => $e->getMessage()]);
     }
 }
-
-
-
-
-// Fetch all messages for a public key
+ */
 function fetchMessages($pubkey, $r_pubkey, $category = null) {
     try {
         $conn = getDbConnection();
@@ -182,6 +193,99 @@ function fetchMessages($pubkey, $r_pubkey, $category = null) {
 
 
 // Fetch conversations for a public key
+
+
+/*  function fetchConversations($pubkey) {
+    try {
+        $conn = getDbConnection();
+
+        // Query to fetch the last message of each conversation
+        $query = "SELECT 
+                    c.* 
+                  FROM charts c
+                  INNER JOIN (
+                      SELECT 
+                          CASE 
+                              WHEN sender_pubkey = ? THEN receiver_pubkey 
+                              ELSE sender_pubkey 
+                          END AS other_pubkey,
+                          MAX(chart_id) AS last_message_id
+                      FROM charts
+                      WHERE sender_pubkey = ? OR receiver_pubkey = ?
+                      GROUP BY other_pubkey
+                  ) latest ON c.id = latest.last_message_id";
+
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("sss", $pubkey, $pubkey, $pubkey);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        // Fetch and return the conversations
+        $conversations = $result->fetch_all(MYSQLI_ASSOC);
+        echo json_encode($conversations);
+
+        $stmt->close();
+    } catch (Exception $e) {
+        echo json_encode(["error" => $e->getMessage()]);
+    }
+} */
+
+
+
+
+
+/*  function fetchConversations($pubkey) {
+    try {
+        $conn = getDbConnection();
+
+        // Step 1: Fetch all messages involving the user
+        $query = "
+            SELECT 
+                chart_id,
+                sender_pubkey,
+                receiver_pubkey,
+                message,
+                timestamp
+            FROM charts
+            WHERE sender_pubkey = ? OR receiver_pubkey = ?
+            ORDER BY timestamp DESC
+        ";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("ss", $pubkey, $pubkey);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        echo  json_encode($result) . '<br/>';
+
+        // Step 2: Process data to get the latest message per unique user
+        $conversations = [];
+        while ($row = $result->fetch_assoc()) {
+            // Determine the other user in the conversation
+            $otherPubkey = ($row['sender_pubkey'] === $pubkey) 
+                ? $row['receiver_pubkey'] 
+                : $row['sender_pubkey'];
+
+            echo $otherPubkey . '<br/>';
+
+            // Store the latest message per unique user
+            if (!isset($conversations[$otherPubkey])) {
+                $conversations[$otherPubkey] = $row;
+            }
+        }
+
+        
+        echo  json_encode($conversations) . '<br/>';
+
+        // Step 3: Return the filtered results as a JSON array
+        echo json_encode(array_values($conversations)); // Reindex for JSON output
+        $stmt->close();
+
+    } catch (Exception $e) {
+        echo json_encode(["error" => $e->getMessage()]);
+    }
+}
+ */
+
  function fetchConversations($pubkey) {
     try {
         $conn = getDbConnection();
@@ -397,4 +501,6 @@ function generateOpenAIImage($prompt, $imageSize = "512x512") {
         throw new Exception('Unexpected API response structure');
     }
 }
+
+
 ?>
