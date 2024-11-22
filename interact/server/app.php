@@ -281,7 +281,7 @@ function getOpenAIReply($userMessage) {
 
     // API endpoint for chat completions
     $url = 'https://api.openai.com/v1/chat/completions';
-    echo json_encode($messages);
+    // echo json_encode($messages);
     // Request data
     $data = [
         'model' => 'gpt-4',
@@ -308,7 +308,7 @@ function getOpenAIReply($userMessage) {
 
     // Execute cURL request
     $response = curl_exec($ch);
-    echo $response;
+    // echo $response;
     // Check for cURL errors
     if ($response === false) {
         echo 'cURL error: ' . curl_error($ch);
