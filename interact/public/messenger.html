@@ -773,7 +773,7 @@ async function sendMessage(senderPubKey = publicKey, receiverPubKey = null, mess
 }
  */
 
- async function sendMessage(senderPubKey = publicKey, receiverPubKey = null, message = "", media = null) {
+ async function sendMessage(senderPubKey = null, receiverPubKey = null, message = "", media = null) {
     // If parameters are not provided, fallback to fetching from DOM or URL
     if (!receiverPubKey) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -785,7 +785,7 @@ async function sendMessage(senderPubKey = publicKey, receiverPubKey = null, mess
             alert('Sender public key is missing. Please login or select a sender.');
             return;
         }
-        // senderPubKey = publicKey.toString();  // Assume `publicKey` is a global variable 
+        senderPubKey = publicKey.toString();  // Assume `publicKey` is a global variable 
         // toString to ensure the entire string is returned. and not the pointer
     }
 
@@ -806,7 +806,7 @@ async function sendMessage(senderPubKey = publicKey, receiverPubKey = null, mess
 
     const formData = new FormData();
     formData.append('send_message', true);
-    formData.append('sender_pubkey', senderPubKey);
+    formData.append('sender_pubkey', (!senderPubKey) ? publicKey : senderPubKey);
     formData.append('receiver_pubkey', receiverPubKey);
     formData.append('message', message);
     if (media) {
