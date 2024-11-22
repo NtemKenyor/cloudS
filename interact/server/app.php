@@ -270,8 +270,12 @@ function getOpenAIReply($userMessage) {
     $token = $gbt_TOKEN;
     // echo $token;
     // Define the conversation messages
+    // $messages = [
+    //     ["role" => "system", "content" => "You are a friend and an online chat expert. listen more and provide solutions."]
+    // ];
+
     $messages = [
-        // ["role" => "system", "content" => "You are a friend and an online chat expert. listen more and provide solutions."]
+        ["role" => "system", "content" => ""]
     ];
 
     // Add user message to the conversation
