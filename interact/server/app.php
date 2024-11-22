@@ -1,6 +1,6 @@
 <?php
 
-require 'db.php';
+// require 'db.php';
 require $_SERVER['DOCUMENT_ROOT']."/alltrenders/env_variables/accessor/db.php";
 
 // Routing mechanism

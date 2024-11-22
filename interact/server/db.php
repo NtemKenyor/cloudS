@@ -19,7 +19,7 @@ function loadEnv($path) {
         // Trim and remove quotes
         $key = trim($key);
         $value = trim($value);
-        $value = trim($value, '"');
+        $value = trim($value, '"'); // I feel this line should be remove to some extect.
 
         // Store into environment
         $_ENV[$key] = $value;
@@ -28,7 +28,7 @@ function loadEnv($path) {
 }
 
 // Load .env variables
-loadEnv(__DIR__ . '/.env');
+// loadEnv(__DIR__ . '/.env');
 
 // Database connection
 function getDbConnection() {
