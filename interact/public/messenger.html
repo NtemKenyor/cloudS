@@ -714,7 +714,12 @@ async function sendMessage(senderPubKey = null, receiverPubKey = null, message =
     }
 
     if (!senderPubKey) {
-        senderPubKey = publicKey;  // Assume `publicKey` is a global variable
+        if (typeof publicKey === 'undefined' || !publicKey) {
+            alert('Sender public key is missing. Please login or select a sender.');
+            return;
+        }
+        senderPubKey = publicKey.toString();  // Assume `publicKey` is a global variable 
+        // toString to ensure the entire string is returned.
     }
 
     if (!receiverPubKey) {
@@ -752,7 +757,7 @@ async function sendMessage(senderPubKey = null, receiverPubKey = null, message =
 
         // Check if the status is "True"
         if (result.status === "True") {
-            alert('Message sent successfully!');
+            // alert('Message sent successfully!');
             fetchMessages(receiverPubKey); // Refresh messages
             document.getElementById('message-input').value = ""; // Clear message input
             if (receiverPubKey === "AI" || receiverPubKey === "AI-Image-creator"){
