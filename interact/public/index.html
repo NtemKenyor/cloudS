@@ -11,10 +11,10 @@
     <script src="js/forge.min.js" defer></script>
     <!-- <script src="js/marked.min.js" defer></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-    <script src="js/general.js?id=857859" defer></script>
+    <script src="js/general.js?id=7488593" defer></script>
     <!-- <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script> -->
 
-    <link rel="stylesheet" href="styles/general.css?id=85769589">
+    <link rel="stylesheet" href="styles/general.css?id=64758375">
 <style>
     /* Basic Reset */
 /* body, html {
@@ -35,7 +35,7 @@
     /* background: rgba(0, 0, 0, 0.7); */
     /* background: blueviolet;  */
     background: linear-gradient(135deg, red, blue);
-    /* display: inline-block; */
+    display: flex;
     /* flex-direction: column; */
     align-items: center;
     justify-content: center;
@@ -1037,8 +1037,8 @@ document.getElementById('postForm').addEventListener('submit', async (event) => 
         await make_some_post();
     } finally {
         hideSpinner(submitButton, originalText); // Hide spinner after completion
-        // document.getElementById('postPopup').style.display = 'none'; // to hide the post Pop-up
-        // window.location.reload();
+        document.getElementById('postPopup').style.display = 'none'; // to hide the post Pop-up
+        window.location.reload();
     }
 });
 
