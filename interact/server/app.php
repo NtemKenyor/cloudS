@@ -271,7 +271,7 @@ function getOpenAIReply($userMessage) {
     // echo $token;
     // Define the conversation messages
     $messages = [
-        ["role" => "system", "content" => "You are a friend and an online chat expert. listen more and provide solutions or just improve."]
+        // ["role" => "system", "content" => "You are a friend and an online chat expert. listen more and provide solutions."]
     ];
 
     // Add user message to the conversation
