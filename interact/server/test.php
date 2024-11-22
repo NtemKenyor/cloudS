@@ -181,7 +181,7 @@ function generateOpenAIImage($prompt, $imageSize = "512x512") {
             'Content-Type: application/json',
             'Authorization: Bearer ' . $token
         ],
-        CURLOPT_TIMEOUT => 10 // Set timeout for better error handling
+        CURLOPT_TIMEOUT => 60 // Set timeout for better error handling
     ]);
 
     // Execute cURL request
