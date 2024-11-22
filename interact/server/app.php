@@ -271,7 +271,7 @@ function getOpenAIReply($userMessage) {
     // echo $token;
     // Define the conversation messages
     $messages = [
-        ["role" => "system", "content" => "You are a forum expert, a creative content creator, and an intelligent assistant."]
+        ["role" => "system", "content" => "You are a friend and an online chat expert. listen more and provide solutions or just improve."]
     ];
 
     // Add user message to the conversation
@@ -287,7 +287,7 @@ function getOpenAIReply($userMessage) {
         'model' => 'gpt-4',
         'messages' => $messages,
         'temperature' => 0.4,
-        'max_tokens' => 200,
+        'max_tokens' => 100,
         'top_p' => 1,
         'frequency_penalty' => 0,
         'presence_penalty' => 0
