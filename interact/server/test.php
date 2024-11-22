@@ -102,7 +102,7 @@ function getOpenAIReply($userMessage) {
     echo json_encode($messages);
     // Request data
     $data = [
-        'model' => 'gpt-3.5-turbo',
+        'model' => 'gpt-4',
         'messages' => $messages,
         'temperature' => 0.4,
         'max_tokens' => 200,
@@ -155,14 +155,84 @@ function getOpenAIReply($userMessage) {
     }
 }
 
-// Example usage
-$userMessage = "Say something about CR7?";
-$reply = getOpenAIReply($userMessage);
 
-if ($reply !== null) {
-    echo $reply;
-} else {
-    echo 'Failed to retrieve a reply.';
+function generateOpenAIImage($prompt, $imageSize = "512x512") {
+    // Include your environment variables
+    require $_SERVER['DOCUMENT_ROOT'] . "/alltrenders/env_variables/accessor/accessor_main.php";
+    $token = $gbt_TOKEN;
+
+    // OpenAI API endpoint for image generation
+    $url = 'https://api.openai.com/v1/images/generations';
+
+    // Data payload for API request
+    $data = [
+        'prompt' => $prompt,
+        'n' => 1, // Number of images to generate
+        'size' => $imageSize // Options: 256x256, 512x512, 1024x1024
+    ];
+
+    // Setup cURL
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => json_encode($data),
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token
+        ],
+        CURLOPT_TIMEOUT => 10 // Set timeout for better error handling
+    ]);
+
+    // Execute cURL request
+    $response = curl_exec($ch);
+
+    // Handle cURL errors
+    if ($response === false) {
+        $error = 'cURL error: ' . curl_error($ch);
+        curl_close($ch);
+        throw new Exception($error);
+    }
+
+    // Check HTTP status
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    if ($httpCode !== 200) {
+        throw new Exception("HTTP error code: $httpCode, Response: $response");
+    }
+
+    // Parse response
+    $result = json_decode($response, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception('JSON parse error: ' . json_last_error_msg());
+    }
+
+    // Validate response structure
+    if (isset($result["data"][0]["url"])) {
+        return $result["data"][0]["url"]; // Return the URL of the generated image
+    } else {
+        throw new Exception('Unexpected API response structure');
+    }
 }
+
+
+try {
+    $prompt = "A futuristic city skyline at sunset with flying cars";
+    $imageUrl = generateOpenAIImage($prompt, "1024x1024");
+    echo "Generated Image URL: " . $imageUrl;
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
+
+// Example usage
+// $userMessage = "Say something about CR7?";
+// $reply = getOpenAIReply($userMessage);
+
+// if ($reply !== null) {
+//     echo $reply;
+// } else {
+//     echo 'Failed to retrieve a reply.';
+// }
 
 ?>
