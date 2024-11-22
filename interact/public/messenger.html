@@ -785,7 +785,7 @@ async function sendMessage(senderPubKey = publicKey, receiverPubKey = null, mess
             alert('Sender public key is missing. Please login or select a sender.');
             return;
         }
-        var senderPubKey1 = publicKey.toString();  // Assume `publicKey` is a global variable 
+        var senderPubKey1 = publicKey;  // Assume `publicKey` is a global variable 
         // toString to ensure the entire string is returned. and not the pointer
     }else{
         var senderPubKey1 = senderPubKey;
