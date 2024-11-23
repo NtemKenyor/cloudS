@@ -91,6 +91,7 @@ function sendMessage($sender_pubkey, $receiver_pubkey, $message, $category = 'ch
         } elseif ($sender_pubkey === 'AI-Image-creator') {
             $imageURL = generateOpenAIImage($message); // Generate AI image
             $media_src = $imageURL; // Use the image URL as media source
+            $message = "Result for: " . $message;
         }
 
         // Check message limit for free users
