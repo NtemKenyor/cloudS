@@ -358,15 +358,33 @@
 
     /* Unique slide container */
     .unique-slide-container {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: var(--background-dark);
-      overflow: hidden;
-      font-family: Arial, sans-serif;
+        position: fixed;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        top: 0;
+        background-color: var(--background-dark);
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        z-index: 100;
+        }
+
+        .unique-fade-out {
+        animation: uniqueFadeOut 1s forwards;
     }
+
+    @keyframes uniqueFadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+    }
+
 
     .unique-close-button{
         position: absolute; 
@@ -518,8 +536,8 @@
                     </svg>
                     <span class="username">John Doe</span>
                     <div class="title">Processing Title...</div>
-                    <div class="content">Just sharing a thought about blockchain and free speech. Loading...</div>
-                    <div class="date">2024-11-13</div>
+                    <div class="content">Loading...</div>
+                    <div class="date">2025-11-13</div>
                     <div class="author">Posted by: John Doe</div>
                 </div>
     
@@ -528,9 +546,9 @@
                     <img src="https://via.placeholder.com/600x400" alt="Post Image">
                     <div class="username">Jane Smith</div>
                     <div class="title">Post Processing...</div>
-                    <div class="content">Looking forward to seeing more people get involved in decentralized social platforms. #BlockchainForAll. It’s time we own our data and voices. Join the revolution!</div>
+                    <div class="content">Loading...</div>
                     <div class="date">2024-11-12</div>
-                    <div class="author">Posted by: Jane Smith</div>
+                    <div class="author">Posted by: Loading</div>
                 </div>
             </div>
         </div>
@@ -746,7 +764,7 @@ function load_wallet_simple() {
     if (privateKey) {
         try {
             let keypair = solanaWeb3.Keypair.fromSecretKey(Uint8Array.from(JSON.parse(privateKey)));
-            console.log("Private key loaded for test:", keypair);
+            // console.log("Private key loaded for test:", keypair);
             return keypair; // Ensure keypair is returned successfully
         } catch (error) {
             console.error("Error creating keypair from private key:", error);
@@ -1362,7 +1380,7 @@ function arrayBufferToBase64(buffer) {
 
 
 
-<div class="unique-slide-container">
+<div class="unique-slide-container" id="unique-slide-container">
     <div id="unique-close-button" class="unique-close-button" onclick="document.getElementById('unique-slide-container').remove();">✖</div>
     <!-- Animated background -->
     <div class="unique-slide-background"></div>
@@ -1467,32 +1485,91 @@ function arrayBufferToBase64(buffer) {
   };
   
 
-  
+   
     function uniqueUpdateSlide() {
-      const slide = uniqueContent.slides[uniqueCurrentSlide];
-      uniqueCategoryEl.textContent = slide.category;
-      uniqueTitleEl.textContent = slide.title;
-      uniqueTextEl.textContent = slide.text;
-      uniqueIconEl.innerHTML = slide.icon;
-  
-      // Assign class based on category for styling
-      document.querySelector('.unique-slide-show').className = `unique-slide-show category-${slide.category.replace(/\s+/g, '-')}`;
-  
-      uniquePrevBtn.disabled = uniqueCurrentSlide === 0;
-      uniqueNextBtn.disabled = uniqueCurrentSlide === uniqueContent.slides.length - 1;
+        const slide = uniqueContent.slides[uniqueCurrentSlide];
+        uniqueCategoryEl.textContent = slide.category;
+        uniqueTitleEl.textContent = slide.title;
+        uniqueTextEl.textContent = slide.text;
+        uniqueIconEl.innerHTML = slide.icon;
+    
+        // Assign class based on category for styling
+        document.querySelector('.unique-slide-show').className = `unique-slide-show category-${slide.category.replace(/\s+/g, '-')}`;
+    
+        uniquePrevBtn.disabled = uniqueCurrentSlide === 0;
+        // uniqueNextBtn.disabled = uniqueCurrentSlide === uniqueContent.slides.length - 1;
 
-      if (uniqueCurrentSlide === uniqueContent.slides.length - 1) {
-        // unique-slide-container
-        document.getElementById('unique-slide-container').remove(); // Remove if viewed
-        document.cookie = "uniqueViewedSlides=true; path=/";
-      }
-
+        if (uniqueCurrentSlide === uniqueContent.slides.length - 1) {
+            
+            uniqueNextBtn.textContent = "Start";
+        }
     }
-  
+
+    
+   /* function uniqueUpdateSlide() {
+        const slide = uniqueContent.slides[uniqueCurrentSlide];
+
+        // Add a fade-out class before updating the content
+        const slideShow = document.querySelector('.unique-slide-show');
+        slideShow.classList.add("unique-fade-out-slide");
+
+        // Wait for the fade-out to complete, then update content
+        setTimeout(() => {
+            uniqueCategoryEl.textContent = slide.category;
+            uniqueTitleEl.textContent = slide.title;
+            uniqueTextEl.textContent = slide.text;
+            uniqueIconEl.innerHTML = slide.icon;
+
+            // Assign unique class for styling per category
+            slideShow.className = `unique-slide-show category-${slide.category.replace(/\s+/g, '-')}`;
+            
+            // Add a fade-in effect after updating the content
+            slideShow.classList.add("unique-fade-in-slide");
+
+            // Ensure buttons are enabled/disabled appropriately
+            uniquePrevBtn.disabled = uniqueCurrentSlide === 0;
+
+            if (uniqueCurrentSlide === uniqueContent.slides.length - 1) {
+                uniqueNextBtn.textContent = "Finish";
+            } else {
+                uniqueNextBtn.textContent = "Next";
+            }
+
+            // Remove the animation classes after they finish
+            setTimeout(() => {
+                slideShow.classList.remove("unique-fade-out-slide", "unique-fade-in-slide");
+            }, 500); // Match animation duration
+        }, 500); // Match fade-out duration
+    }
+ */
+    
+ // Handle "Finish" logic when Next is clicked on the last slide
+    /* uniqueNextBtn.addEventListener("click", () => {
+        if (uniqueCurrentSlide === uniqueContent.slides.length - 1) {
+            const slideContainer = document.getElementById("unique-slide-container");
+            slideContainer.classList.add("unique-fade-out"); // Add fade-out animation to container
+
+            // After animation ends, remove the container and set the cookie
+            setTimeout(() => {
+                slideContainer.remove();
+                document.cookie = "uniqueViewedSlides=true; path=/";
+            }, 1000); // Match container animation duration
+        }
+    }); */
+
     function uniqueNextSlide() {
       if (uniqueCurrentSlide < uniqueContent.slides.length - 1) {
         uniqueCurrentSlide++;
         uniqueUpdateSlide();
+      }else{
+        const slideContainer = document.getElementById("unique-slide-container");
+        slideContainer.classList.add("unique-fade-out"); // Add fade-out animation
+            
+        // After animation ends, remove the element and set the cookie
+        setTimeout(() => {
+            slideContainer.remove(); // Remove after animation
+            document.cookie = "uniqueViewedSlides=true; path=/";
+        }, 1000); // Match the animation duration (1s)
       }
     }
   
