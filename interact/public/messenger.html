@@ -523,7 +523,7 @@ if (
 ) {
     // Use localhost URLs
     window.NODE_URL = "http://localhost:3000";
-    window.PHP_URL = "http://localhost";
+    window.PHP_URL = "http://localhost/cloudS/interact/server";
 } else {
     // Use live URLs
     window.NODE_URL = "https://roynek.com/cloudS/interact/backend";
@@ -592,7 +592,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchConversations();
-    document.getElementById('send-button').addEventListener('click', sendMessage);
+    // document.getElementById('send-button').addEventListener('click', sendMessage );
+    document.getElementById('send-button').addEventListener('click', () => sendMessage());
+
 
 });
 
@@ -773,22 +775,24 @@ async function sendMessage(senderPubKey = publicKey, receiverPubKey = null, mess
 }
  */
 
- async function sendMessage(senderPubKey = null, receiverPubKey = null, message = "", media = null) {
+ async function sendMessage(senderPubKey=null, receiverPubKey = null, message = "", media = null) {
     // If parameters are not provided, fallback to fetching from DOM or URL
     if (!receiverPubKey) {
         const urlParams = new URLSearchParams(window.location.search);
         receiverPubKey = urlParams.get('receiver_publickey');
     }
 
-    if (!senderPubKey) {
+    if (!senderPubKey || senderPubKey === null) {
         if (typeof publicKey === 'undefined' || !publicKey) {
             alert('Sender public key is missing. Please login or select a sender.');
             return;
         }
-        var senderPubKey1 = publicKey;  // Assume `publicKey` is a global variable 
+        console.log("senting the pub key");
+        var senderPubKey1 = publicKey; // Assume `publicKey` is a global variable 
         // toString to ensure the entire string is returned. and not the pointer
     }else{
-        var senderPubKey1 = senderPubKey;
+        console.log("finding pub key");
+        var senderPubKey1 =senderPubKey;
     }
 
     if (!receiverPubKey) {
@@ -827,10 +831,10 @@ async function sendMessage(senderPubKey = publicKey, receiverPubKey = null, mess
         // Check if the status is "True"
         if (result.status === "True") {
             // alert('Message sent successfully!');
-            fetchMessages(receiverPubKey); // Refresh messages
+            fetchMessages(publicKey); // Refresh messages
             document.getElementById('message-input').value = ""; // Clear message input
             if (receiverPubKey === "AI" || receiverPubKey === "AI-Image-creator"){
-                await sendMessage(receiverPubKey, publicKey); // reverse it making the AI the sender.
+                await sendMessage(receiverPubKey, publicKey, message); // reverse it making the AI the sender.
             }
         } else {
             alert('Failed to send message.');

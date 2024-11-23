@@ -110,7 +110,7 @@
         ) {
             // Use localhost URLs
             window.NODE_URL = "http://localhost:3000";
-            window.PHP_URL = "http://localhost";
+            window.PHP_URL = "http://localhost/cloudS/interact/server";
         } else {
             // Use live URLs
             window.NODE_URL = "https://roynek.com/cloudS/interact/backend";
