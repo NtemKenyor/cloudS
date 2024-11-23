@@ -696,9 +696,11 @@ async function fetchMessages(user) {
 
             // Check if media_src is present
             if (msg.media_src) {
+                console.log("we got in...");
                 // Determine if the media is an image or a video
                 const fileExtension = msg.media_src.split('.').pop().toLowerCase();
                 if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension)) {
+                    console.log("media is an image");
                     const img = document.createElement('img');
                     img.src = msg.media_src;
                     img.alt = 'Sent Media';
