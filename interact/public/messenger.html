@@ -831,7 +831,7 @@ async function sendMessage(senderPubKey = publicKey, receiverPubKey = null, mess
         // Check if the status is "True"
         if (result.status === "True") {
             // alert('Message sent successfully!');
-            fetchMessages(publicKey); // Refresh messages
+            fetchMessages(receiverPubKey); // Refresh messages
             document.getElementById('message-input').value = ""; // Clear message input
             if (receiverPubKey === "AI" || receiverPubKey === "AI-Image-creator"){
                 await sendMessage(receiverPubKey, publicKey, message); // reverse it making the AI the sender.
