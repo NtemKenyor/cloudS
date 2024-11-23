@@ -146,8 +146,8 @@ We welcome contributions from the community! To contribute:
 ## 💬 **Contact**
 
 For queries and support, please contact:
-- **Email**: support@cloudsplatform.com
-- **Twitter**: [@CloudSPlatform](https://twitter.com/CloudSPlatform)
+- **Email**: nkenyor@gmail.com
+- **Twitter**: [@CloudSPlatform](https://twitter.com/NKenyor)
 
 ---
 
