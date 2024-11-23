@@ -1133,8 +1133,11 @@ async function make_some_post({
         nude: "false",
         encryption: "",
         share: "false",
+        comment: "false",
+        main_post_id: "", 
         category: "entertainment",
         hash: "",
+        pubkey: keypair.publicKey.toBase58(),
         ip: "",
         geo: "LAT, LONG",
         others: ""
@@ -1213,8 +1216,11 @@ async function d_post_sharer(entry){
             nude: "false",
             encryption: "", // encryption: "AES256",
             share: "true",
+            comment: "false",
+            main_post_id: "", 
             category: "entertainment", // "technology",
-            hash: "abc123hash",
+            hash: "",
+            pubkey: keypair.publicKey.toBase58(),
             ip: "", // TODO: we would get this...
             geo: ",", //TODO: We would get this and it would be the LAT,LONG
             others: ""
