@@ -657,6 +657,13 @@ async function fetchMessages(user) {
             messageDiv.classList.add('message');
             // messageDiv.classList.add(msg.sender === "You" ? "sender" : "receiver");
             messageDiv.classList.add(msg.sender_pubkey === publicKey ? "sender" : "receiver");
+            
+            if(msg.media_src){
+                // messageDiv.innerHTML = "<img src="+msg.media_src+"/>";
+                const img = document.createElement('img');
+                img.src = msg.media_src;
+                messageDiv.appendChild(img);
+            }
             messageDiv.textContent = msg.message;
             messagesDisplay.appendChild(messageDiv);
         });
@@ -664,50 +671,6 @@ async function fetchMessages(user) {
         console.error('Error fetching messages:', error);
     }
 }
-
-// Send a message
-/* async function sendMessage() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const receiverKey = urlParams.get('receiver_publickey');
-
-    if (!receiverKey) {
-        alert('Please select a receiver to start chatting.');
-        return;
-    }
-
-    const receiver = document.getElementById('active-chat-user').textContent;
-    // if (!receiver) {
-    //     alert('Please select a receiver to send a message.');
-    //     return;
-    // }
-
-    const message = document.getElementById('message-input').value;
-    const media = document.getElementById('media-input').files[0];
-
-    const formData = new FormData();
-    formData.append('send_message', true);
-    formData.append('sender_pubkey', publicKey);
-    formData.append('receiver_pubkey', receiver);
-    formData.append('message', message);
-    if (media) {
-        formData.append('media', media);
-    }
-
-    try {
-        const response = await fetch(baseUrl, {
-            method: 'POST',
-            body: formData
-        });
-        const result = await response.json();
-        console.log(result);
-        fetchMessages(receiver);
-        document.getElementById('message-input').value = "";
-    } catch (error) {
-        console.error('Error sending message:', error);
-    }
-}
- */
-
 
 
 /* // Send a message
