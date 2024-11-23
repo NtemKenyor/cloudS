@@ -653,7 +653,8 @@ async function fetchMessages(user) {
         messages.forEach(msg => {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message');
-            messageDiv.classList.add(msg.sender === "You" ? "sender" : "receiver");
+            // messageDiv.classList.add(msg.sender === "You" ? "sender" : "receiver");
+            messageDiv.classList.add(msg.sender === publicKey ? "sender" : "receiver");
             messageDiv.textContent = msg.message;
             messagesDisplay.appendChild(messageDiv);
         });

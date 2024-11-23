@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['sender_pubkey'],
             $_POST['receiver_pubkey'],
             $_POST['message'],
-            $_POST['category'] ?? 'chart',
+            $_POST['category'] ?? 'chat',
             $media_src,
             $_POST['addon'] ?? null
         );
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 // Send a message
-/* function sendMessage($sender_pubkey, $receiver_pubkey, $message, $category = 'chart', $media_src = null, $addon = null) {
+/* function sendMessage($sender_pubkey, $receiver_pubkey, $message, $category = 'chat', $media_src = null, $addon = null) {
     try {
         $conn = getDbConnection(); // Ensure the database connection is established
 
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } */
 
-function sendMessage($sender_pubkey, $receiver_pubkey, $message, $category = 'chart', $media_src = null, $addon = null) {
+function sendMessage($sender_pubkey, $receiver_pubkey, $message, $category = 'chat', $media_src = null, $addon = null) {
     try {
         $conn = getDbConnection(); // Ensure the database connection is established
 
