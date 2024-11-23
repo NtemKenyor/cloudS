@@ -650,8 +650,9 @@ async function setActiveChat(user) {
     await fetchMessages(user);
 }
 
+
 // Fetch messages for the active chat
-async function fetchMessages(user) {
+/* async function fetchMessages(user) {
     try {
         const response = await fetch(`${baseUrl}?pubkey=${publicKey}&category=chat&r_pubkey=${user}`);
         const messages = await response.json();
@@ -677,7 +678,55 @@ async function fetchMessages(user) {
         console.error('Error fetching messages:', error);
     }
 }
+ */
 
+
+ // Fetch messages for the active chat
+async function fetchMessages(user) {
+    try {
+        const response = await fetch(`${baseUrl}?pubkey=${publicKey}&category=chat&r_pubkey=${user}`);
+        const messages = await response.json();
+        const messagesDisplay = document.getElementById('messages-display');
+        messagesDisplay.innerHTML = ''; // Clear the display
+
+        messages.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(msg.sender_pubkey === publicKey ? "sender" : "receiver");
+
+            // Check if media_src is present
+            if (msg.media_src) {
+                // Determine if the media is an image or a video
+                const fileExtension = msg.media_src.split('.').pop().toLowerCase();
+                if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExtension)) {
+                    const img = document.createElement('img');
+                    img.src = msg.media_src;
+                    img.alt = 'Sent Media';
+                    img.style.maxWidth = '100%'; // Optional styling
+                    messageDiv.appendChild(img);
+                } else if (['mp4', 'avi', 'wmv', 'mov', 'mkv'].includes(fileExtension)) {
+                    const video = document.createElement('video');
+                    video.src = msg.media_src;
+                    video.controls = true; // Adds playback controls
+                    video.style.maxWidth = '100%'; // Optional styling
+                    messageDiv.appendChild(video);
+                } else {
+                    console.warn(`Unsupported media type: ${msg.media_src}`);
+                }
+            }
+
+            // Add the text message
+            const text = document.createElement('p');
+            text.textContent = msg.message;
+            messageDiv.appendChild(text);
+
+            // Append the message div to the messages display
+            messagesDisplay.appendChild(messageDiv);
+        });
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+    }
+}
 
 /* // Send a message
 async function sendMessage(senderPubKey = publicKey, receiverPubKey = null, message = "", media = null) {
