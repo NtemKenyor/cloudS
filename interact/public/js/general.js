@@ -656,7 +656,8 @@
         document.getElementById('home')?.addEventListener('click', () => userRedirect("index.html"));
         document.getElementById('message_item')?.addEventListener('click', () => userRedirect("messenger.html"));
         document.getElementById('games')?.addEventListener('click', () => userRedirect("games.html"));
-
+        document.getElementById('about_us')?.addEventListener('click', () => alert("This Project is inspired by the SOON Hackathon. More updates coming soon. ") );
+        
 
         // const profileElement = document.getElementById('profile');
         // if (profileElement) {

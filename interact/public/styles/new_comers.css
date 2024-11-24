@@ -1,0 +1,152 @@
+    /* Root variables for colors */
+    :root {
+      --primary-red: #d32f2f;
+      --primary-blue: #1976d2;
+      --background-dark: #121212;
+      --white: #ffffff;
+      --cool-corner-radius: 15px;
+      --button-radius: 8px;
+    }
+
+    /* Unique slide container */
+    .unique-slide-container {
+        position: fixed;
+        /* display: flex; */
+        display: none;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100%;
+        top: 0;
+        background-color: var(--background-dark);
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+        z-index: 100;
+        }
+
+        .unique-fade-out {
+        animation: uniqueFadeOut 1s forwards;
+    }
+
+    @keyframes uniqueFadeOut {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+    }
+
+
+    .unique-close-button{
+        position: absolute; 
+        top: 10px; 
+        right: 10px; 
+        width: 30px; 
+        height: 30px; 
+        background-color: var(--primary-red); 
+        color: #fff; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        border-radius: 50%; 
+        font-size: 16px; 
+        cursor: pointer; 
+        z-index: 1000;
+    }
+
+    /* Animated background */
+    .unique-slide-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+      animation: backgroundAnimation 12s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes backgroundAnimation {
+      0% {
+        background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+      }
+      50% {
+        background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+      }
+      100% {
+        background: linear-gradient(135deg, var(--primary-red), var(--primary-blue));
+      }
+    }
+
+    /* Slide show container */
+    .unique-slide-show {
+      width: 90%;
+      max-width: 900px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: var(--cool-corner-radius);
+      padding: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+      text-align: center;
+      color: var(--white);
+    }
+
+    /* Category Header */
+    .category-header {
+      font-size: 3rem;
+      font-weight: bold;
+      color: var(--primary-red);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    /* Title */
+    .unique-slide-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    /* Text content */
+    .unique-slide-text {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      font-weight: 400;
+      margin-bottom: 30px;
+      color: rgba(255, 255, 255, 0.85);
+    }
+
+    /* Navigation buttons */
+    .unique-slide-buttons button {
+      background-color: var(--primary-red);
+      color: var(--white);
+      border: none;
+      padding: 12px 30px;
+      font-size: 1.1rem;
+      margin: 0 15px;
+      cursor: pointer;
+      border-radius: var(--button-radius);
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .unique-slide-buttons button:hover {
+      background-color: var(--primary-blue);
+      transform: scale(1.05);
+    }
+
+    .unique-prev-btn:disabled,
+    .unique-next-btn:disabled {
+      background-color: grey;
+      cursor: not-allowed;
+    }
+
+    /* Category-specific styling */
+    .category-icon {
+      width: 70px;
+      height: 70px;
+      margin: 20px 0;
+      fill: var(--primary-red);
+    }
+

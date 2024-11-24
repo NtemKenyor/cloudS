@@ -3,166 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOON Universe - Home</title>
+    <title>SOON Universe Gmaing Hub - Home</title>
     <link rel="icon" href="logo.png" type="image/jpeg">
 
-    <style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <link rel="stylesheet" href="styles/games.css">
+    
 
-        /* Full-Screen Background */
-        body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            color: white;
-            background-color: #0a0a0a;
-            position: relative;
-        }
-
-        /* Background Animations */
-        .background {
-            position: absolute;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .stars, .stars2, .stars3 {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat top center;
-            z-index: -1;
-            animation: animateStars 50s linear infinite;
-        }
-
-        .stars2 {
-            background: url('https://www.transparenttextures.com/patterns/tiny-grid.png') repeat top center;
-            animation: animateStars2 100s linear infinite;
-        }
-
-        .stars3 {
-            background: url('https://www.transparenttextures.com/patterns/dark-matter.png') repeat top center;
-            animation: animateStars3 150s linear infinite;
-        }
-
-        @keyframes animateStars {
-            from {transform: translateY(0);}
-            to {transform: translateY(-1000px);}
-        }
-
-        @keyframes animateStars2 {
-            from {transform: translateY(0);}
-            to {transform: translateY(-2000px);}
-        }
-
-        @keyframes animateStars3 {
-            from {transform: translateY(0);}
-            to {transform: translateY(-3000px);}
-        }
-
-        /* SOON Universe Logo */
-        .logo img {
-            width: 250px;
-            margin-bottom: 40px;
-            animation: fadeInLogo 2s ease-in-out;
-        }
-
-        @keyframes fadeInLogo {
-            0% {opacity: 0;}
-            100% {opacity: 1;}
-        }
-
-        /* Centered Container */
-        .container {
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Games List Section */
-        .games-list {
-            margin-top: 30px;
-        }
-
-        .title {
-            font-size: 3rem;
-            color: #00aaff;
-            animation: fadeInText 2s ease-in-out;
-        }
-
-        @keyframes fadeInText {
-            0% {opacity: 0;}
-            100% {opacity: 1;}
-        }
-
-        /* Individual Game Items */
-        .game-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            margin: 20px 0;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            animation: slideIn 1s ease-out;
-            transition: transform 0.3s ease;
-        }
-
-        .game-item:hover {
-            transform: scale(1.05);
-        }
-
-        @keyframes slideIn {
-            from {transform: translateX(-100vw);}
-            to {transform: translateX(0);}
-        }
-
-        .game-title {
-            font-size: 1.8rem;
-            color: #ff9900;
-        }
-
-        .game-description {
-            font-size: 1.2rem;
-            margin-top: 5px;
-        }
-
-        /* Play Button */
-        .play-button {
-            padding: 10px 20px;
-            font-size: 1rem;
-            color: white;
-            background-color: #ff5050;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .play-button:hover {
-            background-color: #ff3333;
-        }
-
-        /* Layout for Game Info and Button */
-        .game-info {
-            flex-grow: 1;
-            text-align: left;
-            padding-right: 20px;
-        }
-
-    </style>
 </head>
 <body>
 
@@ -213,28 +59,7 @@
         </div>
     </div>
 
-    <script>
-        // Play Button Functionality
-        function playGame(gameName) {
-            // Dictionary of game titles and their respective directories
-            const gameDirectories = {
-                "Space Explorer": "space_explorer/",
-                "Aquatic SOON": "aquatic_SOON/",
-                "Riddle Time": "SOON_planet/",
-                
-            };
-
-            // Check if the selected game exists in the dictionary
-            if (gameDirectories[gameName]) {
-                // Redirect to the game directory using a relative URL
-                window.location.href = gameDirectories[gameName];
-            } else {
-                alert("Game not found!");
-            }
-        }
-
-
-    </script>
 
 </body>
+<script src="js/games.js?id=748475892" defer></script>
 </html>
