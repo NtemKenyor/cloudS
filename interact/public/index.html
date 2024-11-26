@@ -21,7 +21,7 @@
 
     <link rel="stylesheet" href="styles/general.css?id=64758375">
     <link rel="stylesheet" href="styles/new_comers.css?id=74857384">
-    <link rel="stylesheet" href="styles/profile_and_post.css?id=82378493">
+    <link rel="stylesheet" href="styles/profile_and_post.css?id=7339589583u">
 
 
 
@@ -178,19 +178,31 @@
             <span class="close-btn" id="closePopup">&times;</span>
             <h2>Create a Post</h2>
             <form id="postForm">
-                <input type="text" id="title" placeholder="Post Title">
-                <textarea id="content" placeholder="Write your post in markdown..." rows="10"></textarea>
+                <input type="text" maxlength="32" id="title" placeholder="Post Title">
+                <div class="counter" id="titleCounter">0 / 32</div>
+
+                <textarea id="content" maxlength="300" placeholder="Write your post here..." rows="10"></textarea>
+                <div class="counter-textarea" id="contentCounter">0 / 300</div>
+
                 <div id="markdownTools">
                     <button type="button" data-tag="**">Bold</button>
                     <button type="button" data-tag="_">Italic</button>
                     <button type="button" data-tag="### ">Heading</button>
                     <button type="button" id="insertImage">Image</button>
                 </div>
-                <input type="text" id="image_url" placeholder="Image URL">
+
+                <button class="more_button" id="moreButton" type="button">More</button>
+                
+                <input type="text" maxlength="82" id="image_url" placeholder="Image URL">
+                <div class="counter" id="image_urlCounter">0 / 82</div>
+
                 <input type="text" id="author" placeholder="Author (optional)">
                 <input type="text" id="others" style="display: none;" placeholder="Unique Tips">
                 <button type="submit">Submit</button>
+
+                <!-- <button class="more_form_button" type="button">More</button> -->
             </form>
+
         </div>
     </div>
 
@@ -229,7 +241,7 @@
   </div>
 
 
-  <script src="js/profile_and_post.js" ></script>
+  <script src="js/profile_and_post.js?id=7484398593" ></script>
   <script src="js/new_comers.js?id=485748578" ></script>
 
   

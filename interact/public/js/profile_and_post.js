@@ -706,3 +706,100 @@ function arrayBufferToBase64(buffer) {
     return btoa(String.fromCharCode.apply(null, new Uint8Array(buffer)));
 }
  */
+
+
+
+
+
+
+// Get the More button and the form
+/* const moreButton = document.getElementById('moreButton');
+const postForm = document.getElementById('postForm');
+
+// Add click event listener to toggle visibility
+moreButton.addEventListener('click', () => {
+  // Find all input elements inside the form (excluding type="button" and type="submit")
+  const hiddenInputs = postForm.querySelectorAll('input[style*="display: none"]');
+  const isHidden = hiddenInputs.length > 0; // Check if any inputs are hidden
+
+  // Toggle display for hidden inputs
+  postForm.querySelectorAll('input').forEach(input => {
+    if (input.type !== 'button' && input.type !== 'submit') {
+      input.style.display = isHidden ? 'block' : 'none'; // Show if hidden, hide otherwise
+    }
+  });
+
+  // Update button text
+  moreButton.textContent = isHidden ? 'Less' : 'More';
+});
+
+
+
+
+function updateCounter(element, counterId, maxLength) {
+    const counter = document.getElementById(counterId);
+    const currentLength = element.value.length;
+    counter.textContent = `${currentLength} / ${maxLength}`;
+}
+
+document.getElementById('title').addEventListener('input', function () {
+    updateCounter(this, 'titleCounter', 25);
+});
+
+document.getElementById('content').addEventListener('input', function () {
+    updateCounter(this, 'contentCounter', 270);
+});
+
+ */
+
+
+  // Get the More button and the form
+  const moreButton = document.getElementById('moreButton');
+  const postForm = document.getElementById('postForm');
+
+  // Add event listener for the More button
+  moreButton.addEventListener('click', () => {
+    // Find all input elements inside the form (excluding type="button" and type="submit")
+    const hiddenInputs = postForm.querySelectorAll('input[style*="display: none"]');
+    const isHidden = hiddenInputs.length > 0; // Check if any inputs are hidden
+
+    // Toggle display for hidden inputs
+    postForm.querySelectorAll('input').forEach(input => {
+      if (input.type !== 'button' && input.type !== 'submit') {
+        input.style.display = isHidden ? 'block' : 'none'; // Show if hidden, hide otherwise
+      }
+    });
+
+    // Show/hide corresponding counters for the inputs
+    postForm.querySelectorAll('.counter').forEach(counter => {
+      counter.style.display = isHidden ? 'block' : 'none'; // Match visibility with inputs
+    });
+
+    // Update button text
+    moreButton.textContent = isHidden ? 'Less' : 'More';
+  });
+
+  // Function to update the character counter for an input or textarea
+  function updateCounter(input, counter) {
+    const maxLength = input.getAttribute('maxlength');
+    const currentLength = input.value.length;
+    counter.textContent = `${currentLength} / ${maxLength}`;
+  }
+
+  // Attach input event listeners to all inputs and textareas
+  document.querySelectorAll('#postForm input, #postForm textarea').forEach(input => {
+    const counterId = input.id + 'Counter'; // Assume counter ID matches input ID + 'Counter'
+    const counter = document.getElementById(counterId);
+
+    if (counter) {
+      // Update counter on input
+      input.addEventListener('input', () => {
+        updateCounter(input, counter);
+      });
+
+      // Initialize counter on page load
+      updateCounter(input, counter);
+    }
+  });
+
+
