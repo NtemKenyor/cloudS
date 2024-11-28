@@ -10,7 +10,7 @@ const programId = new PublicKey("HFnssVc9XfdaHe4pdTNG8DH69V6zrKviSFWjf4FWTifp");
 
 // Function to determine if running on localhost
 const isLocalhost = () => {
-    const env = process.env.NODE_ENV;
+    const env = process.env.NODE_ENV || "production";;
     return env === "development" || env === "localhost";
 };
 
