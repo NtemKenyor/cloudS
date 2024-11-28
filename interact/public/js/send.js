@@ -7,8 +7,47 @@ if (typeof solanaWeb3 === 'undefined') {
 let keypair;
 // Connect to the Solana devnet
 // const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-const connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
+// const connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
 // const connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
+// Function to determine if running on localhost
+/* function isLocalhost() {
+    // Check for typical localhost scenarios
+    const hostname = typeof window !== 'undefined' ? window.location.hostname : null;
+    return hostname === "localhost" || hostname === "127.0.0.1";
+};
+  
+// Set connection endpoint based on environment
+const rpcUrl = isLocalhost()
+? "http://127.0.0.1:8899" // Localhost endpoint
+: "https://rpc.devnet.soo.network/rpc"; // Live server endpoint
+
+const connection = new Connection(rpcUrl, "confirmed");
+ */
+
+// Initialize global variables using the window object
+if (
+    window.location.hostname === "localhost" || 
+    window.location.hostname.startsWith("127.") || 
+    window.location.hostname === "0.0.0.0"
+) {
+    // Use localhost URLs
+    window.NODE_URL = "http://localhost:3000/cloudS/interact/backend";
+    window.PHP_URL = "http://localhost/cloudS/interact/server";
+    window.connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
+} else {
+    // Use live URLs
+    window.NODE_URL = "https://roynek.com/cloudS/interact/backend";
+    window.PHP_URL = "https://roynek.com/cloudS/interact/server";
+    window.connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
+}
+
+// Log the current URLs being used for easy tracking
+console.log("Current NODE_URL:", window.NODE_URL);
+console.log("Current PHP_URL:", window.PHP_URL);
+console.log("Current Blockchain Network:", window.connection);
+
+
+
 
 // Create a new wallet and save private key in localStorage
 // async function createWallet() {
@@ -70,7 +109,7 @@ async function getBalance() {
         alert('No wallet found. Create or load a wallet first.');
         return;
     }
-    const balance = await connection.getBalance(keypair.publicKey);
+    const balance = await window.connection.getBalance(keypair.publicKey);
     document.getElementById('balance').textContent = (balance / solanaWeb3.LAMPORTS_PER_SOL) + ' SOL';
 }
 
@@ -99,7 +138,7 @@ async function sendSol() {
     );
 
     try {
-        const signature = await solanaWeb3.sendAndConfirmTransaction(connection, transaction, [keypair]);
+        const signature = await solanaWeb3.sendAndConfirmTransaction(window.connection, transaction, [keypair]);
         document.getElementById('transactionStatus').textContent = 'Transaction successful! Signature: ' + signature;
     } catch (error) {
         document.getElementById('transactionStatus').textContent = 'Transaction failed: ' + error.message;
@@ -117,7 +156,7 @@ async function sendSol() {
 
 //     try {
 //         const publicKey = new solanaWeb3.PublicKey(programId);
-//         const accountInfo = await connection.getAccountInfo(publicKey);
+//         const accountInfo = await window.connection.getAccountInfo(publicKey);
 
 //         if (accountInfo === null) {
 //             document.getElementById('programOutput').textContent = 'Program not found or has no data.';
@@ -149,12 +188,12 @@ async function interactWithProgram() {
         );
 
         // Send the transaction and confirm it
-        const signature = await solanaWeb3.sendAndConfirmTransaction(connection, transaction, [keypair]);
+        const signature = await solanaWeb3.sendAndConfirmTransaction(window.connection, transaction, [keypair]);
         console.log('Transaction successful! Signature:', signature);
         document.getElementById('programData').textContent = 'Transaction successful! Signature: ' + signature;
 
         // Fetch and display program logs if available
-        const logs = await connection.getTransaction(signature, { commitment: 'confirmed' });
+        const logs = await window.connection.getTransaction(signature, { commitment: 'confirmed' });
         console.log('Transaction logs:', logs);
         document.getElementById('programData').textContent += '\n' + JSON.stringify(logs, null, 2);
 

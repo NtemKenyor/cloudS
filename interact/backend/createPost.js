@@ -4,7 +4,7 @@ const { serialize } = require("borsh");
 
 // Program ID and connection setup
 const programId = new PublicKey("HFnssVc9XfdaHe4pdTNG8DH69V6zrKviSFWjf4FWTifp");
-const connection = new Connection("http://127.0.0.1:8899", "confirmed");
+// const connection = new Connection("http://127.0.0.1:8899", "confirmed");
 // const connection = new Connection("https://rpc.devnet.soo.network/rpc", "confirmed");
 
 // Define the PostMetadata class with UTC timestamp support
@@ -36,9 +36,13 @@ function getUtcTimestamp() {
     return new Date().toISOString(); // ISO string format in UTC
 }
 
-async function createPost(userKeypair, metadata) {
+async function createPost(userKeypair, metadata, network="production") {
     const postAccount = Keypair.generate();
     const metadataWithUtc = new PostMetadata(metadata); // Ensure date defaults to UTC if not provided
+
+    const connection = (network === "localhost" || network === "developmet") 
+        ? new Connection("http://127.0.0.1:8899", "confirmed")
+        : new Connection("https://rpc.devnet.soo.network/rpc", "confirmed");
 
     // Serialize the metadata with the timestamp
     const serializedMetadata = serialize(postMetadataSchema, metadataWithUtc);

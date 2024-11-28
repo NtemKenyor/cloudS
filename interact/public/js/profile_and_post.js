@@ -278,18 +278,20 @@ document.getElementById('closePopup').addEventListener('click', () => {
 document.getElementById('markdownTools').addEventListener('click', (event) => {
     if (event.target.tagName === 'BUTTON') {
         const tag = event.target.getAttribute('data-tag');
-        const textarea = document.getElementById('content');
-        const selectionStart = textarea.selectionStart;
-        const selectionEnd = textarea.selectionEnd;
+        if(tag != null){
+            const textarea = document.getElementById('content');
+            const selectionStart = textarea.selectionStart;
+            const selectionEnd = textarea.selectionEnd;
 
-        const beforeText = textarea.value.substring(0, selectionStart);
-        const selectedText = textarea.value.substring(selectionStart, selectionEnd);
-        const afterText = textarea.value.substring(selectionEnd);
+            const beforeText = textarea.value.substring(0, selectionStart);
+            const selectedText = textarea.value.substring(selectionStart, selectionEnd);
+            const afterText = textarea.value.substring(selectionEnd);
 
-        textarea.value = beforeText + tag + selectedText + tag + afterText;
-        textarea.focus();
-        textarea.selectionStart = selectionStart + tag.length;
-        textarea.selectionEnd = selectionEnd + tag.length;
+            textarea.value = beforeText + tag + selectedText + tag + afterText;
+            textarea.focus();
+            textarea.selectionStart = selectionStart + tag.length;
+            textarea.selectionEnd = selectionEnd + tag.length;
+        }
     }
 });
 
@@ -333,7 +335,38 @@ async function encryptPrivateKey(publicKeyPem, privateKey) {
 
 
 
-document.getElementById('insertImage').addEventListener('click', () => {
+function insertElement(type) {
+    const textarea = document.getElementById('content');
+    const D_URL = prompt(`Enter ${type} URL:`);
+    if (D_URL) {
+        let markdown = '';
+        switch (type) {
+            case 'image':
+                markdown = `![Image Description](${D_URL})`;
+                break;
+            case 'link':
+                markdown = `[URL Description](${D_URL})`;
+                break;
+            case 'iframe':
+            case 'video':
+            case 'audio':
+                // markdown = `{{element|type=${type}|src=${D_URL}|width=640px|height=360px}}`;
+                markdown = `{{element|type=${type}|src=${D_URL}}}`;
+                break;
+            default:
+                return;
+        }
+        textarea.value += markdown;
+    }
+}
+
+document.getElementById('insertImage').addEventListener('click', () => insertElement('image'));
+document.getElementById('insertLink').addEventListener('click', () => insertElement('link'));
+document.getElementById('insertIframe').addEventListener('click', () => insertElement('iframe'));
+document.getElementById('insertVideo').addEventListener('click', () => insertElement('video'));
+document.getElementById('insertAudio').addEventListener('click', () => insertElement('audio'));
+
+/* document.getElementById('insertImage').addEventListener('click', () => {
     const textarea = document.getElementById('content');
     const imageURL = prompt('Enter image URL:');
     if (imageURL) {
@@ -341,7 +374,36 @@ document.getElementById('insertImage').addEventListener('click', () => {
     }
 });
 
+document.getElementById('insertLink').addEventListener('click', () => {
+    const textarea = document.getElementById('content');
+    const D_URL = prompt('Enter URL:');
+    if (D_URL) {
+        textarea.value += `[URL Description](${D_URL})`;
+    }
+});
 
+document.getElementById('insertIframe').addEventListener('click', () => {
+    const textarea = document.getElementById('content');
+    const D_URL = prompt('Enter Iframe URL:');
+    if (D_URL) {
+        // textarea.value += `[URL Description](${D_URL})`;
+        textarea.value += `{{element|type=iframe|src=${D_URL}|width=640px|height=360px}}`
+        // textarea.value += `[URL Description](${D_URL})`;
+    }
+});
+
+
+document.getElementById('insertVideo').addEventListener('click', () => {
+    const textarea = document.getElementById('content');
+    const D_URL = prompt('Enter Video URL:');
+    if (D_URL) {
+        // textarea.value += `[URL Description](${D_URL})`;
+        textarea.value += `{{element|type=video|src=${D_URL}|width=640px|height=360px}}`
+        // textarea.value += `[URL Description](${D_URL})`;
+    }
+});
+
+ */
 
 // window.NODE_URL = "http://localhost:3000/cloudS/interact/backend";
 // window.NODE_URL = "https://roynek.com/cloudS/interact/backend";
@@ -357,10 +419,12 @@ if (
     // Use localhost URLs
     window.NODE_URL = "http://localhost:3000/cloudS/interact/backend";
     window.PHP_URL = "http://localhost/cloudS/interact/server";
+    // window.connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
 } else {
     // Use live URLs
     window.NODE_URL = "https://roynek.com/cloudS/interact/backend";
     window.PHP_URL = "https://roynek.com/cloudS/interact/server";
+    // window.connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
 }
 
 // Log the current URLs being used for easy tracking
@@ -446,6 +510,124 @@ function hideSpinner(button, originalText) {
     button.innerHTML = originalText; // Restore original button content
 }
 
+// Function to inject pop-up HTML and styles if not already on the page
+function ensurePopupHTML() {
+    if (!document.getElementById("popup-container")) {
+        const container = document.createElement("div");
+        container.id = "popup-container";
+        container.style.position = "fixed";
+        container.style.top = "10px";
+        container.style.right = "10px";
+        container.style.width = "320px";
+        container.style.zIndex = "9999";
+        document.body.appendChild(container);
+
+        // Inject styles directly into the page
+        const style = document.createElement("style");
+        style.textContent = `
+            #popup-container {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+            .popup {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #fff;
+                color: #000;
+                border-radius: 8px;
+                padding: 15px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                border-left: 5px solid;
+                animation: fadeIn 0.3s ease-in-out;
+                position: relative;
+            }
+            .popup.success { border-color: #28a745; }
+            .popup.warning { border-color: #ffc107; }
+            .popup.error { border-color: #dc3545; }
+            .popup-icon {
+                flex-shrink: 0;
+                margin-right: 15px;
+            }
+            .popup-content {
+                flex: 1;
+            }
+            .popup-content strong {
+                display: block;
+                font-size: 1rem;
+                margin-bottom: 5px;
+            }
+            .popup-content p {
+                font-size: 0.875rem;
+                margin: 0;
+            }
+            .popup-close {
+                background: none;
+                border: none;
+                broder: 2px dotted #00A;
+                font-size: 1.2rem;
+                color: #333;
+                cursor: pointer;
+                margin-left: 10px;
+                transition: color 0.2s;
+            }
+            .popup-close:hover {
+                color: #000;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Function to show a pop-up
+function showPopup(type, title, message) {
+    ensurePopupHTML();
+
+    const popup = document.createElement("div");
+    popup.className = `popup ${type}`;
+    popup.innerHTML = `
+        <div class="popup-icon">${getSVGIcon(type)}</div>
+        <div class="popup-content">
+            <strong>${title}</strong>
+            <p>${message}</p>
+        </div>
+        <button class="popup-close" aria-label="Close">&times;</button>
+    `;
+    
+    // Add the popup to the container
+    const container = document.getElementById("popup-container");
+    container.appendChild(popup);
+
+    // Add event listener for close button
+    const closeButton = popup.querySelector(".popup-close");
+    closeButton.addEventListener("click", () => popup.remove());
+
+    // Automatically remove pop-up after 5 seconds if not manually closed
+    setTimeout(() => {
+        if (popup.parentElement) popup.remove();
+    }, 5000);
+}
+
+// Function to return SVG icons based on the type
+function getSVGIcon(type) {
+    switch (type) {
+        case "success":
+            return `<svg width="24" height="24" fill="#28a745" xmlns="http://www.w3.org/2000/svg"><path d="M20.285 6.582l-1.422-1.422-8.285 8.283-3.18-3.18-1.423 1.422 4.602 4.603z"></path></svg>`;
+        case "warning":
+            return `<svg width="24" height="24" fill="#ffc107" xmlns="http://www.w3.org/2000/svg"><path d="M1 21h22L12 2 1 21zM12 18h-.01v-2h.01v2zm-.01-4h.01V10h-.01v4z"></path></svg>`;
+        case "error":
+            return `<svg width="24" height="24" fill="#dc3545" xmlns="http://www.w3.org/2000/svg"><path d="M12 1L2 21h20L12 1zm0 16a1 1 0 100-2 1 1 0 000 2zm1-6h-2v6h2V11z"></path></svg>`;
+        default:
+            return "";
+    }
+}
+
+
 // Updated make_some_post function
 async function make_some_post({
     title = document.getElementById("title").value,
@@ -498,18 +680,28 @@ async function make_some_post({
 
         // Handle response
         const result = await response.json();
-        alert("Output: " + JSON.stringify(result));
+
+        // Determine which pop-up to show based on the response
+        if (result.error) {
+            showPopup("error", "Error", `Error: ${result.error}. Details: ${result.details || "No additional details provided."}`);
+            alert("Raw Output: " + JSON.stringify(result));
+        } else if (result.edit_key && result.message && result.signature) {
+            showPopup("success", "Success", "Your post has been successfully created!");
+        } else {
+            showPopup("warning", "Warning", "Unexpected response from the server.");
+            alert("Raw Output: " + JSON.stringify(result));
+        }
+        // alert("Raw Output: "+JSON.stringify(result));
+
     } catch (error) {
         console.error("Error submitting post:", error);
         alert("Failed to submit post.");
     }
 }
 
-// Form submission handler with spinner integration
-document.getElementById('postForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
 
-    const submitButton = event.target.querySelector('button[type="submit"]'); // Target the submit button
+async function post_submitter(){
+    const submitButton = document.getElementById('postButtonSubmitor'); // Target the submit button
     const originalText = submitButton.innerHTML;
 
     showSpinner(submitButton); // Show spinner
@@ -520,10 +712,20 @@ document.getElementById('postForm').addEventListener('submit', async (event) => 
     } finally {
         hideSpinner(submitButton, originalText); // Hide spinner after completion
         document.getElementById('postPopup').style.display = 'none'; // to hide the post Pop-up
-        window.location.reload();
+        // window.location.reload();
     }
+}
+// Form submission handler with spinner integration
+document.getElementById('postForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    await post_submitter();
 });
+// postButtonSubmitor
 
+document.getElementById('postButtonSubmitor').addEventListener('click', async(event)=>{
+    console.log("attempting the submit");
+    await post_submitter();
+})
 
 
 
@@ -598,7 +800,7 @@ async function sendSol({
         );
 
         // Attempt to send and confirm the transaction
-        const signature = await solanaWeb3.sendAndConfirmTransaction(connection, transaction, [keypair]);
+        const signature = await solanaWeb3.sendAndConfirmTransaction(window.connection, transaction, [keypair]);
         
         alert(`Transaction successful! Signature: ${signature}`);
 

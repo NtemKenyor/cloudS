@@ -391,14 +391,56 @@ form#postForm button[type="submit"] {
     font-size: 16px;
 }
 
+form#postForm .submitor{
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+
 form#postForm button[type="submit"]:hover {
     background-color: #45a049;
 }
+
+/* #markdownTools {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+} */
 
 #markdownTools {
     display: flex;
     gap: 10px;
     margin-bottom: 10px;
+    width: 100%;
+    height: auto;
+    overflow-x: scroll;
+
+    /* For Firefox */
+    scrollbar-width: thin; /* Makes the scrollbar slimmer */
+    scrollbar-color: #ddd white; /* Thumb (blue) and track (white) */
+}
+/* For WebKit browsers (Chrome, Edge, Safari) */
+#markdownTools::-webkit-scrollbar {
+    height: 8px; /* Adjust the height of the scrollbar */
+}
+
+#markdownTools::-webkit-scrollbar-track {
+    background: white; /* The track's background */
+    border-radius: 10px; /* Smooth rounded edges for the track */
+}
+
+#markdownTools::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, blue, red); /* Thumb gradient */
+    border-radius: 10px; /* Smooth rounded edges for the thumb */
+}
+
+#markdownTools::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(90deg, red, blue); /* Hover effect */
 }
 
 #markdownTools button {

@@ -13,6 +13,7 @@ const PORT = 3000;
 // Load server's private key from environment variable
 const serverPrivateKeyPem = process.env.SERVER_PRIVATE_KEY;
 const serverPublicKeyPem = process.env.SERVER_PUBLIC_KEY;
+const dNetwork = process.env.NODE_ENV;
 
 let MAIN_DIR = "/cloudS/interact/backend";
 
@@ -25,7 +26,8 @@ app.get(MAIN_DIR+'/', (req, res) => {
 });
 
 app.get(MAIN_DIR+"/api/metadata", async (req, res) => {
-    const metadata = await fetchMetadataForAccounts();
+    
+    const metadata = await fetchMetadataForAccounts(dNetwork);
     res.json(metadata);
 });
 
@@ -52,7 +54,7 @@ async function decryptPrivateKey(privateKeyPem, encryptedPrivateKeyJson) {
     const decryptedChunks = await Promise.all(encryptedData.encryptedChunks.map(async (encryptedChunk) => {
         try {
             let retrievedKey = privateKey.decrypt(encryptedChunk, 'RSA-OAEP');
-            console.log(retrievedKey.length);
+            // console.log(retrievedKey.length);
             return retrievedKey;
         } catch (error) {
             console.error("Error decrypting chunk:", error);
@@ -80,6 +82,7 @@ app.post(MAIN_DIR+"/api/create-post", async (req, res) => {
     try {
         // Get fingerprints of the provided public key and server's public key
         console.log(publicKey, serverPublicKeyPem);
+        console.log(dNetwork);
         const clientPublicKeyFingerprint = getKeyFingerprint(publicKey);
         const serverPublicKeyFingerprint = getKeyFingerprint(serverPublicKeyPem);
 
@@ -110,7 +113,7 @@ app.post(MAIN_DIR+"/api/create-post", async (req, res) => {
         const metadata = { title, content, image_url, author, date, others };
 
         // Proceed to create the post on the blockchain
-        const {signature, program_account} = await createPost(userKeypair, metadata);
+        const {signature, program_account} = await createPost(userKeypair, metadata, dNetwork);
         res.json({ status: "True", message: "Post created successfully", edit_key: program_account, signature });
         
     } catch (err) {

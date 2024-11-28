@@ -57,12 +57,16 @@
             markdown = markdown.replace(/\*(.*?)\*/g, '<em>$1</em>');
             markdown = markdown.replace(/_(.*?)_/g, '<em>$1</em>');
 
-            // Convert links (e.g., [text](url))
-            markdown = markdown.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-
             // Convert images (e.g., ![alt text](image_url))
             markdown = markdown.replace(/!\[([^\]]+)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
 
+            // Convert images (e.g., ![alt text](image_url))
+            markdown = markdown.replace(/##\[([^\]]+)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+
+            // Convert links (e.g., [text](url))
+            markdown = markdown.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+            
             // Convert unordered lists (e.g., - item or * item)
             markdown = markdown.replace(/^\s*[\*\-\+]\s*(.*)$/gm, '<ul><li>$1</li></ul>');
 
@@ -77,6 +81,16 @@
 
             // Convert newlines to <br> for paragraphs
             markdown = markdown.replace(/\n/g, '<br>');
+
+            // markdown = markdown.replace(
+            //     /\{\{element\|type=([^\|]+)\|src=([^\|]+)\|width=([^\|]+)\|height=([^\|]+)\}\}/g,
+            //     '<$1 class="some_more_content" src="$2" width="$3" height="$4" frameborder="0" allowfullscreen></$1>'
+            // );
+
+            markdown = markdown.replace(
+                /\{\{element\|type=([^\|]+)\|src=([^\|]+)\}\}/g,
+                '<$1 class="some_more_content" src="$2" frameborder="0" allowfullscreen></$1>'
+            );
 
             return markdown;
         }
@@ -101,6 +115,32 @@
             }
         }
 
+        // Check if solanaWeb3 is defined
+        if (typeof solanaWeb3 === 'undefined') {
+            alert("solanaWeb3 is not defined. Make sure the Solana Web3 library is loaded.");
+        }
+
+        let keypair;
+
+        // Function to determine if running on localhost
+        /* function isLocalhost() {
+            // Check for typical localhost scenarios
+            const hostname = typeof window !== 'undefined' ? window.location.hostname : null;
+            return hostname === "localhost" || hostname === "127.0.0.1";
+        };
+        
+        // Set connection endpoint based on environment
+        const rpcUrl = isLocalhost()
+            ? "http://127.0.0.1:8899" // Localhost endpoint
+            : "https://rpc.devnet.soo.network/rpc"; // Live server endpoint
+        
+        const connection = new Connection(rpcUrl, "confirmed");
+         */
+
+        // const connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
+        // const connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
+
+
         // Initialize global variables using the window object
         if (
             window.location.hostname === "localhost" || 
@@ -110,15 +150,18 @@
             // Use localhost URLs
             window.NODE_URL = "http://localhost:3000/cloudS/interact/backend";
             window.PHP_URL = "http://localhost/cloudS/interact/server";
+            window.connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
         } else {
             // Use live URLs
             window.NODE_URL = "https://roynek.com/cloudS/interact/backend";
             window.PHP_URL = "https://roynek.com/cloudS/interact/server";
+            window.connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
         }
 
         // Log the current URLs being used for easy tracking
         console.log("Current NODE_URL:", window.NODE_URL);
         console.log("Current PHP_URL:", window.PHP_URL);
+        console.log("Current Blockchain Network:", window.connection);
 
 
         /* async function loadPosts() {
@@ -337,12 +380,7 @@
             alert('New wallet created successfully!');
         } */
 
-        // Check if solanaWeb3 is defined
-        if (typeof solanaWeb3 === 'undefined') {
-            alert("solanaWeb3 is not defined. Make sure the Solana Web3 library is loaded.");
-        }
-
-        let keypair;
+        
 
         // Create a new wallet and save private key in localStorage
         async function createWallet() {
@@ -429,16 +467,14 @@
 
         // Connect to the Solana devnet
         // const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('devnet'), 'confirmed');
-        const connection = new solanaWeb3.Connection('https://rpc.devnet.soo.network/rpc', 'confirmed');
-        // const connection = new solanaWeb3.Connection('http://127.0.0.1:8899', 'confirmed');
-
+        
         // Fetch wallet balance
         async function getBalance() {
             if (!keypair) {
                 alert('No wallet found. Create or load a wallet first.');
                 return;
             }
-            const balance = await connection.getBalance(keypair.publicKey);
+            const balance = await window.connection.getBalance(keypair.publicKey);
             // document.getElementById('balance').textContent = 'Balance: ' + (balance / solanaWeb3.LAMPORTS_PER_SOL).toFixed(2) + ' SOL';
             document.getElementById('balance').textContent = 'Balance: ' + (Math.floor((balance / solanaWeb3.LAMPORTS_PER_SOL) * 100) / 100) + ' SOL';
 
@@ -478,11 +514,11 @@
 
             try {
                 // Get balance in SOL
-                const balanceLamports = await connection.getBalance(keypair.publicKey);
+                const balanceLamports = await window.connection.getBalance(keypair.publicKey);
                 const balanceSOL = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
 
                 // Get account info
-                const accountInfo = await connection.getAccountInfo(keypair.publicKey);
+                const accountInfo = await window.connection.getAccountInfo(keypair.publicKey);
 
                 if (accountInfo) {
                     // Displaying the balance and account info
@@ -512,11 +548,11 @@
 
             try {
                 // Get balance in SOL
-                // const balanceLamports = await connection.getBalance(publicKey);
+                // const balanceLamports = await window.connection.getBalance(publicKey);
                 // const balanceSOL = balanceLamports / solanaWeb3.LAMPORTS_PER_SOL;
 
                 // Get account info
-                const accountInfo = await connection.getAccountInfo(publicKey);
+                const accountInfo = await window.connection.getAccountInfo(publicKey);
 
                 if (accountInfo) {
                     // Displaying the balance and account info
@@ -576,7 +612,7 @@
             );
 
             try {
-                const signature = await solanaWeb3.sendAndConfirmTransaction(connection, transaction, [keypair]);
+                const signature = await solanaWeb3.sendAndConfirmTransaction(window.connection, transaction, [keypair]);
                 showToast('Transaction successful! Signature: ' + signature);
                 // document.getElementById('transactionStatus').textContent = 'Transaction successful! Signature: ' + signature;
             } catch (error) {
@@ -618,7 +654,7 @@
                 );
         
                 // Attempt to send and confirm the transaction
-                const signature = await solanaWeb3.sendAndConfirmTransaction(connection, transaction, [keypair]);
+                const signature = await solanaWeb3.sendAndConfirmTransaction(window.connection, transaction, [keypair]);
                 
                 alert(`Transaction successful! Signature: ${signature}`);
 

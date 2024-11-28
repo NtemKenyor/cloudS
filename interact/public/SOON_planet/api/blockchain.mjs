@@ -7,7 +7,9 @@ import {
   import { getKeypairFromFile } from "@solana-developers/helpers";
   
   const programId = new PublicKey("D2JpLs5Q35QKSsr2QyfMreFyrneXQm4nWvjzUvSTXzwq");
-  const connection = new Connection('https://devnet.sonic.game', 'confirmed');
+  // const connection = new Connection('https://devnet.sonic.game', 'confirmed');
+  const connection = new Connection("https://rpc.devnet.soo.network/rpc", "confirmed");
+
   
   async function getRiddlesFromBlockchain() {
     try {

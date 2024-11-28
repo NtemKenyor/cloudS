@@ -12,7 +12,8 @@ async function interactWithBlockchain() {
     const programId = new PublicKey("D2JpLs5Q35QKSsr2QyfMreFyrneXQm4nWvjzUvSTXzwq");
 
     // Connect to the Solana cluster
-    const connection = new Connection('https://devnet.sonic.game', 'confirmed');
+    // const connection = new Connection('https://devnet.sonic.game', 'confirmed');
+    const connection = new Connection("https://rpc.devnet.soo.network/rpc", "confirmed");
 
     // Load the keypair from the file
     const keyPair = await getKeypairFromFile("~/.config/solana/id.json");
