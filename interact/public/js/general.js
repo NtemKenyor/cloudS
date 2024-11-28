@@ -101,7 +101,6 @@
             }
         }
 
-        // var NODE_URL = "http://localhost:3000";
         // Initialize global variables using the window object
         if (
             window.location.hostname === "localhost" || 
@@ -109,7 +108,7 @@
             window.location.hostname === "0.0.0.0"
         ) {
             // Use localhost URLs
-            window.NODE_URL = "http://localhost:3000";
+            window.NODE_URL = "http://localhost:3000/cloudS/interact/backend";
             window.PHP_URL = "http://localhost/cloudS/interact/server";
         } else {
             // Use live URLs

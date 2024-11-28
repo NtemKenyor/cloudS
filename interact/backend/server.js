@@ -111,7 +111,7 @@ app.post(MAIN_DIR+"/api/create-post", async (req, res) => {
 
         // Proceed to create the post on the blockchain
         const {signature, program_account} = await createPost(userKeypair, metadata);
-        res.json({ message: "Post created successfully", edit_key: program_account, signature });
+        res.json({ status: "True", message: "Post created successfully", edit_key: program_account, signature });
         
     } catch (err) {
         console.error("Error creating post:", err);

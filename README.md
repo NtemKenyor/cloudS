@@ -43,7 +43,7 @@ This directory handles the main operations of the platform:
      - Other PHP scripts for auxiliary server operations.
 
 ### 2. **`media_soon/`**
-   This directory focuses on blockchain-specific operations:
+   This directory focuses on blockchain-specific operations and it is inside the programs folder. the programs folder contains all the programs/smart-contracts in rust and most programs look like this:
    - **`Cargo.toml`** and **`Cargo.lock`**: Rust project dependencies.
    - **`src/lib.rs`**: Rust source code for custom smart contract logic.
    - **`target/`**: Compiled binaries and deployment files.
@@ -115,6 +115,13 @@ CloudS divides its operations into three core parts:
    ```bash
    php -S localhost:8000 -t interact/server
    ```
+*Please understand that you may need to adjust the variables to meet your URL standard(if necessary). You can alway make a deep search across files and replace for testing purposes.*
+```
+'window.NODE_URL = "http://localhost:3000/cloudS/interact/backend";
+
+window.PHP_URL = "http://localhost/cloudS/interact/server";
+```
+
 
 ### Access
 - Frontend: Open `index.html` in a browser or visit `http://localhost:8000`.
@@ -125,9 +132,10 @@ CloudS divides its operations into three core parts:
 ## 🚧 **Roadmap**
 
 ### What's Next?
-- Enhanced **Security**: Introduce advanced encryption to safeguard data.
+- Enhanced **Security**: Introduce client side transaction signing and advanced encryption to safeguard data.
 - **More Games and Features**: Expand the gaming ecosystem and add creative contests.
-- **Community Integration**: Launch initiatives to foster community-driven development.
+- **End to End Encryption**: Include more advance algorithms to foster User to User private messages and post.
+- **Community Integration**: Launch initiatives to foster community-driven development. AND MORE...
 
 ---
 
