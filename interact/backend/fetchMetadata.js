@@ -5,8 +5,8 @@ require('dotenv').config();
 
 // // HFnssVc9XfdaHe4pdTNG8DH69V6zrKviSFWjf4FWTifp
 const programId = new PublicKey("HFnssVc9XfdaHe4pdTNG8DH69V6zrKviSFWjf4FWTifp");
-// // const connection = new Connection("http://127.0.0.1:8899", "confirmed");
-const connection = new Connection("https://rpc.devnet.soo.network/rpc", "confirmed");
+const connection = new Connection("http://127.0.0.1:8899", "confirmed");
+// const connection = new Connection("https://rpc.devnet.soo.network/rpc", "confirmed");
 
 // // Function to determine if running on localhost
 // const isLocalhost = () => {
