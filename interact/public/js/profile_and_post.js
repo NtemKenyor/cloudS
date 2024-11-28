@@ -21,7 +21,7 @@ document.getElementById('prof_share').addEventListener('click', async () => {
 
     try {
         // Attempt to load the user's keypair
-        keypair = load_wallet_simple();
+        keypair = await load_wallet_simple();
         publicKey = keypair?.publicKey?.toBase58();
 
         if (!publicKey) {
@@ -67,7 +67,7 @@ document.getElementById('prof_message').addEventListener('click', async () => {
 
     try {
         // Attempt to load the user's keypair
-        keypair = load_wallet_simple();
+        keypair = await load_wallet_simple();
         publicKey = keypair?.publicKey?.toBase58();
 
         if (!publicKey) {
@@ -111,7 +111,7 @@ document.getElementById('prof_message').addEventListener('click', async () => {
 // Utility function to load and retrieve the public key
 async function getPublicKey() {
     try {
-        const keypair = load_wallet_simple();
+        const keypair = await load_wallet_simple();
         const publicKey = keypair?.publicKey?.toBase58();
 
         if (!publicKey) {
@@ -121,7 +121,7 @@ async function getPublicKey() {
         return publicKey;
     } catch (error) {
         console.error("Error retrieving the keypair:", error);
-        alert("Unable to retrieve public key. Please ensure your wallet is loaded.");
+        // alert("Unable to retrieve public key. Please ensure your wallet is loaded.");
         return null;
     }
 }
@@ -247,7 +247,7 @@ function writeCookie(name, value, days = 30) {
     document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/`;
 }
 
-function load_wallet_simple() {
+async function load_wallet_simple() {
     const privateKey = localStorage.getItem('solana_private_key');
     if (privateKey) {
         try {
@@ -268,7 +268,7 @@ function load_wallet_simple() {
 /* async function little_profile() {
     let keypair; // Declare keypair in the function's scope
     try {
-        keypair = load_wallet_simple();
+        keypair =await load_wallet_simple();
         if (keypair) {
             console.log("Testing keypair:", keypair.publicKey.toBase58());
         } else {
@@ -329,7 +329,7 @@ async function little_profile() {
 
     // Load the keypair
     try {
-        keypair = load_wallet_simple();
+        keypair = await load_wallet_simple();
         if (keypair) {
             console.log("Testing keypair:", keypair.publicKey.toBase58());
         } else {
