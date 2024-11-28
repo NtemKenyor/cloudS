@@ -11,15 +11,179 @@ IQIDAQAB
 -----END PUBLIC KEY-----`;
 
 
-// var keypair
-document.getElementById('prof_share').addEventListener('click', () => {
-    alert('Sharing profile...');
-    // Add the corresponding logic here
+
+/* 
+document.getElementById('prof_share').addEventListener('click', async () => {
+    // alert('Sharing profile...');
+
+    let keypair;
+    let publicKey;
+
+    try {
+        // Attempt to load the user's keypair
+        keypair = load_wallet_simple();
+        publicKey = keypair?.publicKey?.toBase58();
+
+        if (!publicKey) {
+            throw new Error("Public key not found. Ensure your wallet is loaded.");
+        }
+    } catch (error) {
+        console.error("Error retrieving the keypair:", error);
+        alert("Unable to retrieve public key. Please ensure your wallet is loaded.");
+        return;
+    }
+
+    // Generate the URL with the public key
+    const currentUrl = window.location.href.split('?')[0]; // Get the base URL without query params
+    const shareableUrl = `${currentUrl}?profile_pubKey=${publicKey}`;
+
+    // Display the URL and provide an option to copy it
+    const userResponse = confirm(
+        `Your shareable profile link is ready:\n\n${shareableUrl}\n\nClick 'OK' to copy this link to your clipboard.`
+    );
+
+    if (userResponse) {
+        try {
+            // Copy the URL to the clipboard
+            await navigator.clipboard.writeText(shareableUrl);
+            showPopup("success", "Copied", " You can now share your Profile with your Friends. ");
+            // showToast("Profile link copied to clipboard! Share it with your friends.");
+            
+        } catch (error) {
+            console.error("Failed to copy to clipboard:", error);
+            showPopup("error", "Error", "Could not copy to clipboard.");
+            // alert("Failed to copy the link. You can manually copy it from the prompt.");
+        }
+    }
 });
 
-document.getElementById('prof_message').addEventListener('click', () => {
-    alert('check Message S profile...');
-    // Add the corresponding logic here
+
+
+document.getElementById('prof_message').addEventListener('click', async () => {
+    // alert('Sharing profile...');
+
+    let keypair;
+    let publicKey;
+
+    try {
+        // Attempt to load the user's keypair
+        keypair = load_wallet_simple();
+        publicKey = keypair?.publicKey?.toBase58();
+
+        if (!publicKey) {
+            throw new Error("Public key not found. Ensure your wallet is loaded.");
+        }
+    } catch (error) {
+        console.error("Error retrieving the keypair:", error);
+        alert("Unable to retrieve public key. Please ensure your wallet is loaded.");
+        return;
+    }
+
+    // Determine the target page
+    const targetPage = "messenger.html"; // Adjust as needed
+    const currentUrl = window.location.href.split('?')[0]; // Get base URL without query params
+    const baseUrl = currentUrl.replace(/[^/]*$/, ''); // Remove the current page from the URL
+
+    // Generate the shareable URL with `receiver_publickey` for the target page
+    const shareableUrl = `${baseUrl}${targetPage}?receiver_publickey=${publicKey}`;
+
+    // Display the URL and provide an option to copy it
+    const userResponse = confirm(
+        `Your shareable profile link is ready:\n\n${shareableUrl}\n\nClick 'OK' to copy this link to your clipboard.`
+    );
+
+
+    if (userResponse) {
+        try {
+            // Copy the URL to the clipboard
+            await navigator.clipboard.writeText(shareableUrl);
+            showPopup("success", "All Set!!!", " Success: Your Friends can now send hidden/anonymous messages to you. ");
+            // showToast("Profile link copied to clipboard! Share it with your friends.");
+            
+        } catch (error) {
+            console.error("Failed to copy to clipboard:", error);
+            showPopup("error", "Error", "Could not copy to clipboard.");
+            // alert("Failed to copy the link. You can manually copy it from the prompt.");
+        }
+    }
+});
+ */
+// Utility function to load and retrieve the public key
+async function getPublicKey() {
+    try {
+        const keypair = load_wallet_simple();
+        const publicKey = keypair?.publicKey?.toBase58();
+
+        if (!publicKey) {
+            throw new Error("Public key not found. Ensure your wallet is loaded.");
+        }
+
+        return publicKey;
+    } catch (error) {
+        console.error("Error retrieving the keypair:", error);
+        alert("Unable to retrieve public key. Please ensure your wallet is loaded.");
+        return null;
+    }
+}
+
+// Utility function to generate shareable URLs
+function generateUrl(basePage, paramKey, paramValue) {
+    const currentUrl = window.location.href.split('?')[0]; // Get base URL without query params
+    const baseUrl = currentUrl.replace(/[^/]*$/, ''); // Remove the current page from the URL
+    return `${baseUrl}${basePage}?${paramKey}=${paramValue}`;
+}
+
+// Utility function to handle copy-to-clipboard and display popups
+async function handleShareAction(shareableUrl, successMessage, errorMessage) {
+    const userResponse = confirm(
+        `Your shareable link is ready:\n\n${shareableUrl}\n\nClick 'OK' to copy this link to your clipboard.`
+    );
+
+    if (userResponse) {
+        try {
+            await navigator.clipboard.writeText(shareableUrl);
+            showPopup("success", "Copied", successMessage);
+        } catch (error) {
+            console.error("Failed to copy to clipboard:", error);
+            showPopup("error", "Error", errorMessage);
+        }
+    }
+}
+
+// Profile share button click handler
+document.getElementById('prof_share').addEventListener('click', async () => {
+    const publicKey = await getPublicKey();
+    if (!publicKey) return;
+
+    const shareableUrl = generateUrl(
+        "index.html", // Replace with the actual profile page if needed
+        "profile_pubKey",
+        publicKey
+    );
+
+    handleShareAction(
+        shareableUrl,
+        "You can now share your Profile with your Friends.",
+        "Could not copy to clipboard."
+    );
+});
+
+// Profile message button click handler
+document.getElementById('prof_message').addEventListener('click', async () => {
+    const publicKey = await getPublicKey();
+    if (!publicKey) return;
+
+    const shareableUrl = generateUrl(
+        "messenger.html",
+        "receiver_publickey",
+        publicKey
+    );
+
+    handleShareAction(
+        shareableUrl,
+        "Your friends can now send hidden/anonymous messages to you.",
+        "Could not copy to clipboard."
+    );
 });
 
 document.getElementById('prof_download').addEventListener('click', () => {
@@ -101,7 +265,7 @@ function load_wallet_simple() {
 }
 
 // Main function to load and initialize profile
-async function little_profile() {
+/* async function little_profile() {
     let keypair; // Declare keypair in the function's scope
     try {
         keypair = load_wallet_simple();
@@ -157,7 +321,70 @@ async function little_profile() {
     // if (!cookieExists('email')) writeCookie('email', defaultEmail);
     // if (!cookieExists('publicKey')) writeCookie('publicKey', finalPublicKey);
     // if (!cookieExists('displayName')) writeCookie('displayName', defaultDisplayName);
+} */
+
+async function little_profile() {
+    let keypair; // Declare keypair in the function's scope
+    let userPublicKey;
+
+    // Load the keypair
+    try {
+        keypair = load_wallet_simple();
+        if (keypair) {
+            console.log("Testing keypair:", keypair.publicKey.toBase58());
+        } else {
+            console.log("Keypair could not be loaded.");
+        }
+    } catch (error) {
+        console.error("An error occurred while loading the keypair:", error);
+    }
+
+    // Extract `profile_pubKey` from the URL if present
+    const urlParams = new URLSearchParams(window.location.search);
+    const profilePubKey = urlParams.get('profile_pubKey');
+
+    if (profilePubKey) {
+        console.log("Using profile_pubKey from URL:", profilePubKey);
+        userPublicKey = profilePubKey;
+    } else {
+        try {
+            // Attempt to retrieve the user's public key from keypair
+            userPublicKey = keypair?.publicKey?.toBase58() || null;
+            console.log("Using keypair publicKey:", userPublicKey);
+        } catch (error) {
+            console.warn("Error retrieving user's public key from keypair:", error);
+            // console.log("Error retrieving user's public key from keypair:", error);
+
+        }
+    }
+
+    // Fallback to a default public key if neither profile_pubKey nor keypair is available
+    const finalPublicKey = userPublicKey || "defaultPublicKey12345";
+
+    // Default values
+    const defaultEmail = "user@example.com";
+    const defaultDisplayName = "Default User";
+
+    // Retrieve input elements
+    const emailDisplayer = document.getElementById('email_displayer');
+    const publicKeyDisplayer = document.getElementById('publicKey');
+    const displayNameDisplayer = document.getElementById('displayName');
+
+    // Retrieve values from cookies or use defaults
+    const email = cookieExists('email') ? readCookie('email') : defaultEmail;
+    const displayName = cookieExists('displayName') ? readCookie('displayName') : defaultDisplayName;
+
+    // Set values in the respective fields
+    emailDisplayer.value = email;
+    publicKeyDisplayer.innerText = finalPublicKey; // Set the public key (readonly)
+    displayNameDisplayer.innerText = displayName;
+
+    // Optionally, save the default values to cookies if they don't exist
+    // if (!cookieExists('email')) writeCookie('email', defaultEmail);
+    // if (!cookieExists('publicKey')) writeCookie('publicKey', finalPublicKey);
+    // if (!cookieExists('displayName')) writeCookie('displayName', defaultDisplayName);
 }
+
 
 // Function to handle email change
 function setupEmailChange() {
@@ -721,7 +948,7 @@ document.getElementById('postForm').addEventListener('submit', async (event) => 
     await post_submitter();
 });
 // postButtonSubmitor
-
+// document.getElementById('postButtonSubmitor').addEventListener('click', () => post_submitter());
 document.getElementById('postButtonSubmitor').addEventListener('click', async(event)=>{
     console.log("attempting the submit");
     await post_submitter();
@@ -733,7 +960,7 @@ document.getElementById('postButtonSubmitor').addEventListener('click', async(ev
 async function d_post_sharer(entry){
     post = entry.metadata;
 
-    make_some_post({
+    await make_some_post({
         title: post.title,
         content: post.content,
         author: post.author,

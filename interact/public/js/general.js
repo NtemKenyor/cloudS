@@ -423,7 +423,7 @@
             } else {
                 accountIcon.style.display = 'none';  // Hide the icon if no wallet is found
                 createAccountBtn.style.display = 'block';
-                document,getElementById("profilepopup").style.display = "none";
+                document.getElementById("profilepopup").style.display = "none";
                 alert('No wallet found. Please create a new wallet.');
             }
         }
