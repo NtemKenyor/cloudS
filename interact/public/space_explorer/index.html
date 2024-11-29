@@ -105,7 +105,28 @@
 
     <script src="script_slient.js?id=5464634" defer></script>
     <script src="script.js?id=3874748"></script>
+    <style>
+                /* CSS to center the "Start" button */
+        #startButton {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px 40px;
+            font-size: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
+        #startButton:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+    </style>
     <script>
         // Create stars in the background
         const starField = document.querySelector('.stars');
@@ -142,9 +163,54 @@
             backgroundMusic.play();
         }
 
+            // Function to start background music and display the start button
+    function startBackgroundMusic() {
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const startSound = document.getElementById('startSound');
+
+        // Play the sound effect
+        startSound.play();
+        // Start background music
+        backgroundMusic.play();
+
+
+        // Display the "Start" button after background music starts
+        const startButton = document.getElementById('startButton');
+        startButton.style.display = 'block';  // Show the button
+    }
+
+    // Function to start the game once the "Start" button is clicked
+    function startGame() {
+        const startSound = document.getElementById('startSound');
+
+        // Play the start sound effect
+        startSound.play();
+
+        // Hide the "Start" button
+        const startButton = document.getElementById('startButton');
+        startButton.style.display = 'none';
+
+        // Here you can add your game start logic
+        console.log("Game Started!");
+    }
+
+    // Set up the page on load
+    window.onload = function() {
+        // Start the background music first
+        startBackgroundMusic();
+
+        // Add an event listener to the "Start" button
+        const startButton = document.getElementById('startButton');
+        startButton.addEventListener('click', startGame);
+    };
+
+
         // Call startGame when the game starts
         // Replace this with your actual game start logic
-        window.onload = startGame;
+        // window.onload = startGame;
+
+
+        
     </script>
 </body>
 </html>

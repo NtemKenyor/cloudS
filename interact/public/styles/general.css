@@ -104,7 +104,7 @@
         
         /* Shimmer Effect Placeholder */
         .post .shimmer-placeholder {
-            width: 600px; /* Matches the image dimensions */
+            width: 100%; /* Matches the image dimensions */
             height: 400px; /* Matches the image dimensions */
             background: linear-gradient(
                 90deg,
