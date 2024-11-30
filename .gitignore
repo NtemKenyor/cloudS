@@ -19,7 +19,9 @@ node_modules/
 interact/server/db.php
 
 #ignoring the solana localnet
-interact/backend/test-ledger
+interact/backend/test-ledger/
+interact/backend/test-ledger/*
+
 
 # RustRover
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
