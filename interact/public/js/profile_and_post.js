@@ -812,7 +812,7 @@ function ensurePopupHTML() {
 }
 
 // Function to show a pop-up
-function showPopup(type, title, message) {
+function showPopup(type, title, message, extra_data=null, stay_time=5000) {
     ensurePopupHTML();
 
     const popup = document.createElement("div");
@@ -837,7 +837,21 @@ function showPopup(type, title, message) {
     // Automatically remove pop-up after 5 seconds if not manually closed
     setTimeout(() => {
         if (popup.parentElement) popup.remove();
-    }, 5000);
+
+        if(type="success" && extra_data != null){
+            // Ask the user if they want to download the editing keys
+            const userWantsToDownload = confirm(
+                "Your post editing keys are ready. Would you like to download them now?"
+            );
+            // Downloading the edit keys and reloading the page...
+            if (userWantsToDownload) {
+                downloadDJSON(extra_data);
+                // Reload the page with `page_shuffle=false`
+                shufflePageReload("false");
+            }
+        }
+        
+    }, stay_time);
 }
 
 // Function to return SVG icons based on the type
@@ -913,7 +927,7 @@ async function make_some_post({
             showPopup("error", "Error", `Error: ${result.error}. Details: ${result.details || "No additional details provided."}`);
             alert("Raw Output: " + JSON.stringify(result));
         } else if (result.edit_key && result.message && result.signature) {
-            showPopup("success", "Success", "Your post has been successfully created!");
+            showPopup("success", "Success", "Your post has been successfully created!", result);
         } else {
             showPopup("warning", "Warning", "Unexpected response from the server.");
             alert("Raw Output: " + JSON.stringify(result));
@@ -926,6 +940,30 @@ async function make_some_post({
     }
 }
 
+
+function shufflePageReload(state="false"){
+    const currentUrl = new URL(window.location.href);
+    if (currentUrl.searchParams.has("page_shuffle")) {
+        currentUrl.searchParams.set("page_shuffle", state);
+    } else {
+        currentUrl.searchParams.append("page_shuffle", state);
+    }
+    window.location.href = currentUrl.toString();
+}
+
+function downloadDJSON(result){
+    const jsonContent = JSON.stringify({
+        edit_key: result.edit_key,
+        signature: result.signature,
+    }, null, 2);
+
+    // Create a blob and download link
+    const blob = new Blob([jsonContent], { type: "application/json" });
+    const downloadLink = document.createElement("a");
+    downloadLink.href = URL.createObjectURL(blob);
+    downloadLink.download = "post_editing_keys.json";
+    downloadLink.click();
+}
 
 async function post_submitter(){
     const submitButton = document.getElementById('postButtonSubmitor'); // Target the submit button

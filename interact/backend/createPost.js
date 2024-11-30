@@ -40,13 +40,14 @@ async function createPost(userKeypair, metadata, network="production") {
     const postAccount = Keypair.generate();
     const metadataWithUtc = new PostMetadata(metadata); // Ensure date defaults to UTC if not provided
 
-    const connection = (network === "localhost" || network === "developmet") 
-        ? new Connection("http://127.0.0.1:8899", "confirmed")
-        : new Connection("https://rpc.devnet.soo.network/rpc", "confirmed");
+    const connection = (network === "localhost" || network === "development") 
+    ? new Connection("http://127.0.0.1:8899", "confirmed")
+    : new Connection("https://rpc.devnet.soo.network/rpc", "confirmed");
 
     // Serialize the metadata with the timestamp
     const serializedMetadata = serialize(postMetadataSchema, metadataWithUtc);
 
+    // console.log(connection);
     // Create the account and store metadata on the blockchain
     const createPostTx = new Transaction().add(
         SystemProgram.createAccount({
@@ -57,6 +58,11 @@ async function createPost(userKeypair, metadata, network="production") {
             programId: programId,
         })
     );
+
+    const { blockhash } = await connection.getLatestBlockhash("confirmed");
+    createPostTx.recentBlockhash = blockhash;
+    createPostTx.feePayer = userKeypair.publicKey;
+
 
     // Add the serialized data to the transaction
     createPostTx.add({
@@ -70,11 +76,16 @@ async function createPost(userKeypair, metadata, network="production") {
 
     // Sign and send the transaction
     const signature = await connection.sendTransaction(createPostTx, [userKeypair, postAccount]);
-    await connection.confirmTransaction(signature);
+    // await connection.confirmTransaction(signature);
+    await connection.confirmTransaction(signature, "confirmed");
+
     return {
         signature: signature,
-        program_account: JSON.stringify(Array.from(postAccount.secretKey))
+        program_account: JSON.stringify(Array.from(postAccount.secretKey)),
+        // state: true,
     };
+    
+    
 }
 
 module.exports = { createPost };

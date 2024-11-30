@@ -118,6 +118,13 @@ app.post(MAIN_DIR+"/api/create-post", async (req, res) => {
         
     } catch (err) {
         console.error("Error creating post:", err);
+        console.error("Error during transaction execution:", err.message);
+        let blockchain_logs;
+        if (err.getLogs) {
+            blockchain_logs = await err.getLogs()
+            console.log("Logs:", blockchain_logs );
+        }
+        
         res.status(500).json({ error: "Failed to create post", details: err });
     }
 });
