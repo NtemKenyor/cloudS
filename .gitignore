@@ -18,6 +18,9 @@ Cargo.lock
 node_modules/
 interact/server/db.php
 
+#ignoring the solana localnet
+interact/backend/test-ledger
+
 # RustRover
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
