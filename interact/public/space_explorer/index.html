@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Adventure Game</title>
-    <link rel="icon" href="../logo.png" type="image/jpeg">
+    <title>CloudS: Space Adventure Game</title>
+    <link rel="icon" href="../favicon_io/favicon.ico" type="image/jpeg">
     
     <style>
         body {
@@ -81,6 +81,70 @@
         #walletButtons button:active {
             background-color: rgba(0, 120, 104, 1); /* Darker teal when active */
         }
+
+
+
+
+        
+/* Style for the transparent pop-up overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Style for the pop-up content */
+.popup-content {
+  text-align: center;
+  width: 70%;
+  background: rgba(255, 255, 255, 0.2); /* Transparent white background */
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px); /* Blurring the background */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Style for the Start button */
+.startGameButton {
+  font-size: 24px;
+  width: 50%;
+  padding: 15px 30px;
+  color: white;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  animation: pulse 2s infinite;
+}
+
+/* Button hover effect */
+.startGameButton:hover {
+  transform: scale(1.1);
+  background: linear-gradient(45deg, #ff4b2b, #ff416c);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Button pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+  }
+}
+
     </style>
 </head>
 <body>
@@ -103,30 +167,16 @@
         Your browser does not support the audio tag.
     </audio>
 
+    <div id="gameStartPopup" class="popup-overlay">
+        <div class="popup-content">
+            <button id="startGameButton" class="startGameButton" onclick="resetGame()">Start</button>
+        </div>
+    </div>
+      
+
     <script src="script_slient.js?id=5464634" defer></script>
-    <script src="script.js?id=3874748"></script>
-    <style>
-                /* CSS to center the "Start" button */
-        #startButton {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px 40px;
-            font-size: 24px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    <script src="script.js?id=3874748" defer></script>
 
-        #startButton:hover {
-            background-color: rgba(0, 0, 0, 0.8);
-        }
-
-    </style>
     <script>
         // Create stars in the background
         const starField = document.querySelector('.stars');
@@ -163,54 +213,16 @@
             backgroundMusic.play();
         }
 
-            // Function to start background music and display the start button
-    function startBackgroundMusic() {
-        const backgroundMusic = document.getElementById('backgroundMusic');
-        const startSound = document.getElementById('startSound');
-
-        // Play the sound effect
-        startSound.play();
-        // Start background music
-        backgroundMusic.play();
-
-
-        // Display the "Start" button after background music starts
-        const startButton = document.getElementById('startButton');
-        startButton.style.display = 'block';  // Show the button
-    }
-
-    // Function to start the game once the "Start" button is clicked
-    function startGame() {
-        const startSound = document.getElementById('startSound');
-
-        // Play the start sound effect
-        startSound.play();
-
-        // Hide the "Start" button
-        const startButton = document.getElementById('startButton');
-        startButton.style.display = 'none';
-
-        // Here you can add your game start logic
-        console.log("Game Started!");
-    }
-
-    // Set up the page on load
-    window.onload = function() {
-        // Start the background music first
-        startBackgroundMusic();
-
-        // Add an event listener to the "Start" button
-        const startButton = document.getElementById('startButton');
-        startButton.addEventListener('click', startGame);
-    };
+        document.getElementById("startGameButton").addEventListener("click", () => {
+            document.getElementById("gameStartPopup").style.display = "none";
+            // backgroundMusic.play();
+            startGame();
+        });
 
 
         // Call startGame when the game starts
         // Replace this with your actual game start logic
         // window.onload = startGame;
-
-
-        
     </script>
 </body>
 </html>

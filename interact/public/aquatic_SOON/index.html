@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>River Adventure Game</title>
-    <link rel="icon" href="../logo.png" type="image/jpeg">
+    <title>CloudS: River Adventure Game</title>
+    <link rel="icon" href="../favicon_io/favicon.ico" type="image/jpeg">
+    <!-- <link rel="icon" href="../logo.png" type="image/jpeg"> -->
 
     <style>
         body {
             margin: 0;
             overflow: hidden;
-            background-image: url('https://i.pinimg.com/originals/31/46/f6/3146f6e9d0daaba23ee565abbd87043a.gif'); Ocean/water background
+            background-image: url('https://i.pinimg.com/originals/31/46/f6/3146f6e9d0daaba23ee565abbd87043a.gif'); /* Ocean/water background */
             background-size: cover; /* Cover the entire body */
             position: relative; /* Position for score element */
         }
@@ -52,6 +53,72 @@
             }
         }
 
+
+
+
+
+
+/* Style for the transparent pop-up overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Style for the pop-up content */
+.popup-content {
+  text-align: center;
+  width: 70%;
+  background: rgba(255, 255, 255, 0.2); /* Transparent white background */
+  padding: 20px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px); /* Blurring the background */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Style for the Start button */
+.startGameButton {
+  font-size: 24px;
+  width: 50%;
+  padding: 15px 30px;
+  color: white;
+  background: linear-gradient(45deg, #ff416c, #ff4b2b);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  animation: pulse 2s infinite;
+}
+
+/* Button hover effect */
+.startGameButton:hover {
+  transform: scale(1.1);
+  background: linear-gradient(45deg, #ff4b2b, #ff416c);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Button pulse animation */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+  }
+}
+
+
+
     </style>
 </head>
 <body>
@@ -63,6 +130,13 @@
     <source src="music.mp3" type="audio/mpeg"> <!-- Replace with actual music URL -->
     Your browser does not support the audio tag.
 </audio>
+
+<div id="gameStartPopup" class="popup-overlay">
+    <div class="popup-content">
+        <button id="startGameButton" class="startGameButton" onclick="startGame()">Start</button>
+    </div>
+</div>
+  
 
 <script src="script_slient.js?id=4785594" defer></script>
 <script>
@@ -82,14 +156,23 @@
     let score = 0;
     let gameOver = false;
 
-    // Event listener for key presses
+    /* // Event listener for key presses
     document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowUp') {
             platformer.dy = -5;
         } else if (event.key === 'ArrowDown') {
             platformer.dy = 5;
         }
+    }); */
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowUp' || event.key === ' ') {
+            platformer.dy = -5;
+            event.preventDefault(); // Prevents scrolling
+        } else if (event.key === 'ArrowDown') {
+            platformer.dy = 5;
+        }
     });
+
 
     // Event listener for clicks (mobile/touchpad)
     canvas.addEventListener('click', () => {
@@ -232,23 +315,18 @@
         }
     }
 
-    // Start the game
-    setInterval(createFish, 1000); // Create a fish every second
-    gameLoop();
-
-    // Play background music
-    const bgMusic = document.getElementById('bgMusic');
-    bgMusic.play();
+    
 
     // Create bubble animations
     function createBubble() {
         const bubble = document.createElement('div');
         bubble.className = 'bubble';
         const size = Math.random() * (60 - 20) + 20; // Random size for bubbles
+        // bubble.style.position = `absolute`;
         bubble.style.width = `${size}px`;
         bubble.style.height = `${size}px`;
         bubble.style.left = `${Math.random() * window.innerWidth}px`;
-        bubble.style.bottom = `${-size}px`; // Start slightly below the bottom for a smoother effect
+        bubble.style.bottom = `${Math.random() * window.innerHeight}px`; // Start slightly below the bottom for a smoother effect
         document.body.appendChild(bubble);
 
         // Remove the bubble after the animation
@@ -260,6 +338,23 @@
     // Create bubbles at intervals
     setInterval(createBubble, 500); // Create a bubble every 500ms
 
+    function startGame(){
+        // Start the game
+        setInterval(createFish, 1000); // Create a fish every second
+        gameLoop();
+
+        // Play background music
+        const bgMusic = document.getElementById('bgMusic');
+        bgMusic.play();
+
+    }
+
+    document.getElementById("startGameButton").addEventListener("click", () => {
+        document.getElementById("gameStartPopup").style.display = "none";
+        // backgroundMusic.play();
+        startGame();
+    });
+    
 </script>
 
 </body>

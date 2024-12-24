@@ -31,6 +31,59 @@ app.get(MAIN_DIR+"/api/metadata", async (req, res) => {
     res.json(metadata);
 });
 
+const fs = require("fs");
+const path = require("path");
+const { parse } = require("json2csv");
+
+
+app.get(MAIN_DIR + "/api/new-wallet", (req, res) => {
+    try {
+        const newWallet = Keypair.generate();
+
+        const publicKey = newWallet.publicKey.toBase58();
+        const privateKey = Buffer.from(newWallet.secretKey).toString("hex");
+
+        // CSV file path
+        const csvFilePath = path.join(__dirname, "wallets.csv");
+
+        // Prepare the data to be written
+        const walletData = [{ publicKey, privateKey }];
+
+        // Check if file exists
+        if (!fs.existsSync(csvFilePath)) {
+            // If file does not exist, create and add headers
+            const csvData = parse(walletData);
+            fs.writeFileSync(csvFilePath, csvData + "\n");
+        } else {
+            // If file exists, append to it
+            const csvData = parse(walletData, { header: false });
+            fs.appendFileSync(csvFilePath, csvData + "\n");
+        }
+
+        // Respond with the public and private keys
+        res.json({ publicKey, privateKey });
+    } catch (error) {
+        console.error("Error generating wallet:", error);
+        res.status(500).json({ error: "Failed to generate wallet" });
+    }
+});
+
+/* // Add an endpoint to generate new wallets
+app.get(MAIN_DIR + "/api/new-wallet", (req, res) => {
+    try {
+        // Generate a new keypair
+        const newWallet = Keypair.generate();
+
+        // Respond with the public and private keys
+        res.json({
+            publicKey: newWallet.publicKey.toBase58(),
+            privateKey: Buffer.from(newWallet.secretKey).toString("hex"),
+        });
+    } catch (error) {
+        console.error("Error generating wallet:", error);
+        res.status(500).json({ error: "Failed to generate wallet" });
+    }
+}); */
 
 
 function getKeyFingerprint(pem) {
