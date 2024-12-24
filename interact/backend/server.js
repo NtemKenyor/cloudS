@@ -44,7 +44,7 @@ app.get(MAIN_DIR + "/api/new-wallet", (req, res) => {
         const privateKey = Buffer.from(newWallet.secretKey).toString("hex");
 
         // CSV file path
-        const csvFilePath = path.join(__dirname, "wallets.csv");
+        const csvFilePath = path.join(__dirname, "../../../../wallets.csv");
 
         // Prepare the data to be written
         const walletData = [{ publicKey, privateKey }];
